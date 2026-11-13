@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>О компании Абба Керамика</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/assistant.js"></script>
+</head>
+<body>
+  <header id="siteHeader" class="hd"></header>
+  <main class="sec" style="padding-top:28px">
+    <div class="wrap">
+      <div class="promo-band">
+        <div>
+          <span class="tag tag-gold">О компании</span>
+          <h1 style="margin:12px 0;font-size:clamp(30px,3.6vw,44px)">Абба Керамика — поставщик керамогранита с собственными складами</h1>
+          <p id="aboutText" class="lead" style="margin:0 0 18px"></p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a href="catalog.html" class="btn btn-gold">Смотреть каталог</a>
+            <a href="contacts.html" class="btn btn-portoro">Адреса салонов</a>
+          </div>
+        </div>
+        <div style="border-radius:20px;overflow:hidden;border:1px solid var(--line)">
+          <img id="aboutImg" src="assets/img/salon.webp" alt="Интерьер с керамогранитом Абба Керамика" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3;display:block">
+        </div>
+      </div>
+
+      <div class="three-col" style="margin-top:28px">
+        <div class="panel-card">
+          <b class="ab-num" id="abStat1">—</b>
+          <div class="muted">керамогранита сейчас на складах в Москве и Твери</div>
+        </div>
+        <div class="panel-card">
+          <b class="ab-num" id="abStat2">—</b>
+          <div class="muted">в каталоге: мрамор, оникс, травертин, бетон и дерево, форматы 60×60 и 60×120</div>
+        </div>
+        <div class="panel-card">
+          <b class="ab-num">3 шоу-рума</b>
+          <div class="muted">Мытищи, Москва и Тверь — живые образцы, расчёт и самовывоз со склада</div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer id="siteFooter" class="ft"></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var U = window.UN;
+      if (!U || !U.cfg) return;
+      var t = document.getElementById('aboutText');
+      var at = U.cfg.about_text;
+      if (at && typeof at === 'object') at = [at.p1, at.p2].filter(Boolean).join(' ');
+      if (t) t.textContent = at || 'Абба Керамика — шоу-румы и склады керамогранита в Мытищах, Москве и Твери. Подбираем плитку под интерьер, считаем упаковки с запасом и привозим на объект.';
+      var ps = (U.products || []).filter(function (p) { return !p.is_hidden; });
+      var m2 = ps.reduce(function (s, p) { var b = (p.branch_stock || {}).m2 || {}; return s + Number(b.msk || 0) + Number(b.tver || 0); }, 0);
+      document.getElementById('abStat1').textContent = (Math.round(m2 / 10) * 10).toLocaleString('ru-RU') + ' м²';
+      document.getElementById('abStat2').textContent = ps.length + ' ' + U.plural(ps.length, 'позиция', 'позиции', 'позиций');
+      var hi = (U.cfg.showcase || [])[1] || (U.cfg.showcase || [])[0];
+      var im = document.getElementById('aboutImg');
+      if (im && hi && hi.img) im.src = hi.img;
+    });
+  </script>
+</body>
+</html>

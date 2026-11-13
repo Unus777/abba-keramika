@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Доставка и самовывоз — Абба Керамика</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/assistant.js"></script>
+</head>
+<body>
+  <header id="siteHeader" class="hd"></header>
+  <main class="sec" style="padding-top:28px">
+    <div class="wrap">
+      <h1 style="margin:0 0 8px;font-size:clamp(30px,3.6vw,44px)">Доставка и самовывоз со складов</h1>
+      <p class="muted" style="margin:0 0 26px">Бережная перевозка керамогранита на паллетах с фиксацией. Отгрузка из Мытищ, Москвы и Твери.</p>
+
+      <div class="three-col" id="delTariffs"></div>
+
+      <div class="panel-card" style="margin-top:26px">
+        <h2 style="margin-top:0">Пункты самовывоза</h2>
+        <div id="delBranches" style="display:flex;flex-direction:column;gap:12px"></div>
+      </div>
+    </div>
+  </main>
+  <footer id="siteFooter" class="ft"></footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var U = window.UN;
+      if (!U) return;
+      var d = (U.cfg && U.cfg.delivery) || { free_from: 50000, moscow: 2500, mo: 3900, tver: 2900 };
+      document.getElementById('delTariffs').innerHTML =
+        '<div class="panel-card"><span class="tag tag-gold">Москва</span><h3 style="margin:10px 0">' + U.rub(d.moscow) + '</h3><p class="muted">Бесплатно от ' + U.rub(d.free_from) + '. Доставка на следующий день до подъезда.</p></div>' +
+        '<div class="panel-card"><span class="tag tag-gold">Московская область</span><h3 style="margin:10px 0">от ' + U.rub(d.mo) + '</h3><p class="muted">Отгрузка со склада в Мытищах или Люблино. Манипулятор по запросу.</p></div>' +
+        '<div class="panel-card"><span class="tag tag-gold">Тверь и область</span><h3 style="margin:10px 0">' + U.rub(d.tver) + '</h3><p class="muted">Отгрузка со склада ул. Коминтерна 44 или пос. Новая Константиновка д. 1.</p></div>';
+      document.getElementById('delBranches').innerHTML = U.branches().map(function (b) {
+        return '<div class="sum-row"><span><b>' + U.esc(b.city) + '</b> — ' + U.esc(b.address) + (b.warehouse_address ? ' (' + U.esc(b.warehouse_address) + ')' : '') + '</span><b>' + U.esc(b.phone) + '</b></div>';
+      }).join('');
+    });
+  </script>
+</body>
+</html>

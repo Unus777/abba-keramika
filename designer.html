@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>3D-примерочная плитки — Абба Керамика</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/fit3d.css">
+  <script defer src="assets/js/vendor/three.min.js"></script>
+  <script defer src="assets/js/vendor/OrbitControls.js"></script>
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/fit3d.js"></script>
+</head>
+<body>
+  <header id="siteHeader" class="hd"></header>
+  <main class="sec" style="padding-top:24px">
+    <div class="wrap">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:18px">
+        <div>
+          <span class="tag tag-portoro">Онлайн-студия Абба Керамика</span>
+          <h1 style="margin:8px 0 6px;font-size:clamp(28px,3.4vw,42px)">3D-примерочная керамогранита</h1>
+          <p class="muted" style="margin:0">Выберите помещение, примерьте мрамор, травертин или бетон из каталога на пол и стены, настройте цвет затирки.</p>
+        </div>
+        <button type="button" class="btn btn-gold btn-sm" data-lead="Заказать 3D-визуализацию проекта">Заказать проект у дизайнера</button>
+      </div>
+
+      <div class="f3-wrap">
+        <aside class="f3-side">
+          <div class="f3-presets" id="f3TargetTabs">
+            <button type="button" class="f3-btn on" data-tgt="floor">Уложить на пол</button>
+            <button type="button" class="f3-btn" data-tgt="wall">Уложить на стены</button>
+          </div>
+          <input type="search" id="f3Search" class="inp" placeholder="Поиск коллекции или цвета...">
+          <div class="f3-tiles" id="f3Tiles"></div>
+
+          <div>
+            <small class="muted" style="display:block;margin-bottom:6px;font-weight:600">Цвет затирки</small>
+            <div class="f3-swatches" id="f3Grout"></div>
+          </div>
+
+          <div class="field">
+            <label for="f3Pattern">Раскладка</label>
+            <select id="f3Pattern" class="inp">
+              <option value="grid">Прямая (шов в шов)</option>
+              <option value="half">Со смещением 50%</option>
+              <option value="third">Палубная (на 1/3)</option>
+            </select>
+          </div>
+
+          <button type="button" class="btn btn-gold" id="f3AddFloor">Добавить плитку пола в корзину</button>
+        </aside>
+
+        <div class="f3-stage" id="f3Stage">
+          <div class="f3-hud">
+            <div class="f3-pill" id="f3ActiveInfo">Загрузка 3D-сцены...</div>
+            <button type="button" class="f3-pill" id="f3ResetCam">Сбросить камеру</button>
+          </div>
+          <div class="f3-botbar">
+            <div class="f3-presets" id="f3Presets">
+              <button type="button" class="f3-btn on" data-rm="bath">Ванная комната</button>
+              <button type="button" class="f3-btn" data-rm="kitchen">Кухня</button>
+              <button type="button" class="f3-btn" data-rm="living">Гостиная</button>
+            </div>
+            <span class="muted" style="font-size:12px;align-self:center">Крутите сцену мышью или пальцем</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer id="siteFooter" class="ft"></footer>
+</body>
+</html>

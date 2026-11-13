@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 88" width="360" height="88">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F6DF96"/>
+      <stop offset="45%" stop-color="#D4A243"/>
+      <stop offset="100%" stop-color="#9A6B1C"/>
+    </linearGradient>
+    <linearGradient id="portoroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1C1814"/>
+      <stop offset="60%" stop-color="#110E0B"/>
+      <stop offset="100%" stop-color="#282119"/>
+    </linearGradient>
+  </defs>
+  <!-- Nero Portoro Marble Emblem -->
+  <g transform="translate(6, 8)">
+    <rect x="0" y="0" width="72" height="72" rx="18" fill="url(#portoroBg)" stroke="url(#goldGrad)" stroke-width="2"/>
+    <!-- Golden Yellow Marble Veins inside Emblem -->
+    <path d="M8 58 Q24 44 36 48 T64 22" fill="none" stroke="url(#goldGrad)" stroke-width="1.6" stroke-opacity="0.75"/>
+    <path d="M14 16 Q32 28 48 20 T66 42" fill="none" stroke="#F5C84C" stroke-width="1.1" stroke-opacity="0.65"/>
+    <path d="M22 66 Q38 52 58 60" fill="none" stroke="#E2A93B" stroke-width="0.9" stroke-opacity="0.5"/>
+    <!-- Architectural 'A' Monogram -->
+    <path d="M36 15 L54 57 H46.5 L42.2 46.5 H29.8 L25.5 57 H18 L36 15 Z M36 26.5 L32 39.5 H40 L36 26.5 Z" fill="url(#goldGrad)"/>
+  </g>
+  <!-- Brand Typography -->
+  <text x="94" y="43" font-family="'Tenor Sans', Georgia, serif" font-size="30" letter-spacing="3.5" fill="#1E1914">АББА</text>
+  <text x="95" y="66" font-family="'Onest', -apple-system, sans-serif" font-size="12.5" font-weight="600" letter-spacing="5.5" fill="#9E7123">КЕРАМИКА</text>
+</svg>

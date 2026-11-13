@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bgD" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9F5EE"/>
+      <stop offset="100%" stop-color="#EAE0D0"/>
+    </linearGradient>
+    <linearGradient id="portoroAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#191613"/>
+      <stop offset="100%" stop-color="#0E0C0A"/>
+    </linearGradient>
+    <linearGradient id="gVein" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE27A"/>
+      <stop offset="50%" stop-color="#E2A42B"/>
+      <stop offset="100%" stop-color="#9E6B12"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bgD)"/>
+  <!-- Back Accent Wall in Nero Portoro & Milky Travertine -->
+  <polygon points="240,120 960,120 960,540 240,540" fill="#F4EDE2" stroke="#D5C7B2" stroke-width="2"/>
+  <!-- Nero Portoro Feature Zone in Shower/Center -->
+  <rect x="460" y="120" width="280" height="420" fill="url(#portoroAccent)"/>
+  <path d="M470 490 Q560 360 610 310 T730 150" fill="none" stroke="url(#gVein)" stroke-width="4.5"/>
+  <path d="M490 210 Q590 260 725 230" fill="none" stroke="#F5C84C" stroke-width="2.5" opacity="0.8"/>
+  <!-- Left & Right Walls -->
+  <polygon points="0,0 240,120 240,540 0,720" fill="#EFE6D8" stroke="#D5C7B2" stroke-width="1.5"/>
+  <polygon points="1200,0 960,120 960,540 1200,720" fill="#E8DEC9" stroke="#D5C7B2" stroke-width="1.5"/>
+  <!-- Floor with large format tile grid -->
+  <polygon points="240,540 960,540 1200,720 1200,800 0,800 0,720" fill="#E5D9C7"/>
+  <g stroke="#C7B69E" stroke-width="1.5">
+    <line x1="120" y1="630" x2="1080" y2="630"/>
+    <line x1="0" y1="720" x2="1200" y2="720"/>
+    <line x1="420" y1="540" x2="300" y2="800"/>
+    <line x1="600" y1="540" x2="600" y2="800"/>
+    <line x1="780" y1="540" x2="900" y2="800"/>
+  </g>
+  <!-- Freestanding Milky Stone Bathtub & Brass Mixer -->
+  <ellipse cx="600" cy="575" rx="155" ry="42" fill="#FFFDF9" stroke="#D8C8B0" stroke-width="3"/>
+  <path d="M445 575 Q455 665 600 665 Q745 665 755 575 Z" fill="#FAF6F0" stroke="#D8C8B0" stroke-width="3"/>
+  <!-- Backlit Mirror -->
+  <circle cx="600" cy="310" r="76" fill="#2A2520" stroke="url(#gVein)" stroke-width="5"/>
+  <circle cx="600" cy="310" r="68" fill="#3D362E"/>
+  <!-- UI Overlay Badges -->
+  <g transform="translate(60, 50)">
+    <rect width="250" height="54" rx="27" fill="#FFFDF9" fill-opacity="0.92" stroke="#D4A243" stroke-width="1.5"/>
+    <circle cx="28" cy="27" r="10" fill="#181512" stroke="#F5C84C" stroke-width="2"/>
+    <text x="50" y="32" font-family="'Onest', sans-serif" font-size="14" font-weight="600" fill="#1E1914">Акцент: Неро Порторо Голд</text>
+  </g>
+  <g transform="translate(870, 660)">
+    <rect width="270" height="54" rx="27" fill="#FFFDF9" fill-opacity="0.92" stroke="#C8B69C" stroke-width="1.5"/>
+    <circle cx="28" cy="27" r="10" fill="#EFE6D8" stroke="#B8893A" stroke-width="2"/>
+    <text x="50" y="32" font-family="'Onest', sans-serif" font-size="14" font-weight="600" fill="#1E1914">Пол: Травертино Милки 120×60</text>
+  </g>
+</svg>

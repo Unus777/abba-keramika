@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Личный кабинет и бонусная программа — Абба Керамика</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/account.js"></script>
+  <script defer src="assets/js/assistant.js"></script>
+</head>
+<body>
+  <header id="siteHeader" class="hd"></header>
+  <main class="sec" style="padding-top:28px">
+    <div class="wrap" id="accountRoot">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:22px">
+        <div>
+          <h1 style="margin:0 0 6px;font-size:clamp(30px,3.6vw,42px)">Личный кабинет Абба Керамика</h1>
+          <p class="muted" style="margin:0">Избранные коллекции, оформленные заказы и условия накопительных бонусов.</p>
+        </div>
+        <div class="tabs" id="accTabs">
+          <button type="button" class="tab on" data-acc="orders">Мои заказы</button>
+          <button type="button" class="tab" data-acc="favs">Избранное</button>
+          <button type="button" class="tab" data-acc="bonus">Бонусная программа</button>
+          <button type="button" class="tab" data-acc="profile">Профиль</button>
+        </div>
+      </div>
+
+      <section data-acc-panel="orders">
+        <div id="accOrdersList"></div>
+      </section>
+
+      <section data-acc-panel="favs" style="display:none">
+        <div class="rail" id="accFavsGrid"></div>
+      </section>
+
+      <section data-acc-panel="bonus" style="display:none">
+        <div class="three-col">
+          <div class="panel-card"><span class="tag tag-gold">Старт · 3%</span><h3 style="margin:10px 0">От первого заказа</h3><p class="muted">Начисляется 3% кэшбэка баллами (1 балл = 1 ₽) на следующую покупку клея, затирки или плитки.</p></div>
+          <div class="panel-card"><span class="tag tag-gold">Серебро · 5%</span><h3 style="margin:10px 0">От 150 000 ₽</h3><p class="muted">Повышенный бонус 5% и бесплатный 3D-подбор плитки от салона.</p></div>
+          <div class="panel-card"><span class="tag tag-portoro">Золото / Профи · 8%</span><h3 style="margin:10px 0">От 450 000 ₽</h3><p class="muted">Приоритетный резерв на складах в Мытищах, Москве и Твери, персональный менеджер.</p></div>
+        </div>
+      </section>
+
+      <section data-acc-panel="profile" style="display:none">
+        <form id="accProfileForm" class="panel-card" style="max-width:520px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="margin-top:0">Контактные данные</h3>
+          <div class="field"><label>Имя</label><input class="inp" name="name" placeholder="Александр"></div>
+          <div class="field"><label>Телефон</label><input class="inp js-phone" name="phone" placeholder="+7 (___) ___-__-__"></div>
+          <div class="field"><label>Предпочтительный город</label>
+            <select class="inp" name="city">
+              <option value="Москва">Москва · Люблинское поле</option>
+              <option value="Мытищи">Мытищи · Яуза</option>
+              <option value="Тверь">Тверь · Коминтерна 44</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-gold">Сохранить</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <footer id="siteFooter" class="ft"></footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Каталог керамогранита 60×60 и 60×120 — Абба Керамика</title>
+  <meta name="description" content="Каталог керамогранита Абба Керамика: мрамор, оникс, травертин, бетон и дерево. Фото в интерьере, остатки по складам в Москве и Твери.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/catalog.js"></script>
+  <script defer src="assets/js/assistant.js"></script>
+</head>
+<body>
+  <header id="siteHeader" class="hd"></header>
+  <main class="sec" style="padding-top:28px">
+    <div class="wrap">
+      <div style="margin-bottom:20px">
+        <h1 style="margin:0 0 8px;font-size:clamp(30px,3.6vw,44px)">Каталог керамогранита</h1>
+        <p class="muted" style="margin:0" id="catLead">Керамогранит 60×60 и 60×120 с остатками по складам в Москве и Твери. Цены уточняйте у менеджера — пришлём расчёт под ваш объём.</p>
+      </div>
+
+      <div class="cat-layout">
+        <aside class="filters" id="catFilters">
+          <div class="flt-head">
+            <b>Фильтры</b>
+            <button type="button" id="catReset" class="flt-reset">Сбросить</button>
+          </div>
+          <div class="flt-grp">
+            <h4>Поиск</h4>
+            <input type="search" id="catSearch" class="inp" placeholder="Название, артикул, 60×120…" autocomplete="off">
+          </div>
+          <div class="flt-grp"><h4>Наличие</h4>
+            <label class="flt-opt"><span><input type="checkbox" data-flag="stock"> В наличии на складе</span><small class="muted" id="cntStock"></small></label>
+            <label class="flt-opt"><span><input type="checkbox" data-flag="msk"> Склад Москва</span><small class="muted" id="cntMsk"></small></label>
+            <label class="flt-opt"><span><input type="checkbox" data-flag="tver"> Склад Тверь</span><small class="muted" id="cntTver"></small></label>
+            <label class="flt-opt"><span><input type="checkbox" data-flag="new"> Новинки</span><small class="muted" id="cntNew"></small></label>
+            <label class="flt-opt"><span><input type="checkbox" data-flag="photo"> Только с фото</span><small class="muted" id="cntPhoto"></small></label>
+          </div>
+          <div class="flt-grp"><h4>Формат</h4><div id="fltSize"></div></div>
+          <div class="flt-grp"><h4>Фактура</h4><div id="fltDesign"></div></div>
+          <div class="flt-grp"><h4>Цвет</h4><div id="fltColor"></div></div>
+          <div class="flt-grp"><h4>Поверхность</h4><div id="fltSurf"></div></div>
+          <div class="flt-grp"><h4>Помещение</h4><div id="fltRoom"></div></div>
+          <div class="flt-grp"><h4>Страна производства</h4><div id="fltCountry"></div></div>
+          <div class="flt-grp"><h4>Коллекция</h4><div id="fltColl" class="flt-scroll"></div></div>
+          <div class="flt-grp" id="priceGrp" style="display:none">
+            <h4>Цена до: <span id="catPriceVal"></span></h4>
+            <input type="range" id="catPriceMax" min="0" max="10000" step="100" value="10000" style="width:100%;accent-color:var(--gold2)">
+          </div>
+          <button type="button" class="btn btn-gold flt-apply" id="catApplyMob">Показать <span id="catApplyCnt"></span></button>
+        </aside>
+
+        <div>
+          <div class="cat-top">
+            <div style="display:flex;align-items:center;gap:10px">
+              <button type="button" class="btn btn-ghost btn-sm flt-toggle" id="catFltToggle">Фильтры</button>
+              <b id="catCount">Загрузка каталога…</b>
+            </div>
+            <select id="catSort" class="inp" style="width:auto;min-width:210px" aria-label="Сортировка">
+              <option value="popular">Рекомендуем</option>
+              <option value="stock">Больше на складе</option>
+              <option value="new">Сначала новинки</option>
+              <option value="name">По названию (А–Я)</option>
+              <option value="price_asc" data-price>Сначала дешевле</option>
+              <option value="price_desc" data-price>Сначала дороже</option>
+            </select>
+          </div>
+          <div class="chips" id="catChips"></div>
+          <div class="grid-cards" id="catGrid"></div>
+          <div class="pag" id="catPag"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer id="siteFooter" class="ft"></footer>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Оформление заказа — Абба Керамика</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/checkout.js"></script>
+</head>
+<body>
+  <header id="siteHeader" class="hd"></header>
+  <main class="sec" style="padding-top:28px">
+    <div class="wrap">
+      <h1 style="margin:0 0 8px;font-size:clamp(30px,3.6vw,44px)">Оформление заказа</h1>
+      <p class="muted" style="margin:0 0 24px">Заявка сразу попадает в CRM выбранного филиала и резервирует наличие на складе.</p>
+
+      <div class="two-col" style="grid-template-columns:1.15fr 0.85fr;align-items:start">
+        <form id="checkoutForm" class="panel-card" style="display:flex;flex-direction:column;gap:14px">
+          <h3 style="margin:0">Данные получателя</h3>
+          <div class="two-col" style="gap:12px">
+            <div class="field"><label>Имя и фамилия</label><input class="inp" name="name" required placeholder="Николай Петров"></div>
+            <div class="field"><label>Телефон</label><input class="inp js-phone" name="phone" required placeholder="+7 (___) ___-__-__"></div>
+          </div>
+          <div class="field"><label>Email (для накладной и счёта)</label><input class="inp" type="email" name="email" placeholder="client@example.ru"></div>
+
+          <h3 style="margin:8px 0 0">Филиал и доставка</h3>
+          <div class="field"><label>Салон / склад отгрузки</label><select class="inp" name="branch" id="ckBranch"></select></div>
+          <div class="field"><label>Способ получения</label>
+            <select class="inp" id="ckZone" name="zone">
+              <option value="moscow">Доставка по Москве (бесплатно от 50 000 ₽)</option>
+              <option value="mo">Доставка по Московской области</option>
+              <option value="tver">Доставка по Твери и области</option>
+              <option value="pickup">Самовывоз со склада (0 ₽)</option>
+            </select>
+          </div>
+          <div class="field"><label>Адрес доставки (если нужна доставка)</label><input class="inp" name="address" placeholder="Город, улица, дом, подъезд"></div>
+
+          <h3 style="margin:8px 0 0">Оплата и промокод</h3>
+          <div class="field"><label>Способ оплаты</label>
+            <select class="inp" name="pay" id="ckPay">
+              <option value="card">Картой или СБП при согласовании</option>
+              <option value="cash">Наличными в шоу-руме / водителю</option>
+              <option value="invoice">Безналичный расчёт (юрлицо / ИП)</option>
+            </select>
+          </div>
+          <div id="ckOrgFields" class="two-col" style="display:none;gap:12px">
+            <div class="field"><label>Организация</label><input class="inp" name="company" placeholder="ООО СтройМастер"></div>
+            <div class="field"><label>ИНН</label><input class="inp" name="inn" placeholder="7700000000"></div>
+          </div>
+
+          <div style="display:flex;gap:8px;align-items:end">
+            <div class="field" style="flex:1"><label>Промокод (ABBA5 или DESIGN10)</label><input class="inp" id="ckPromo" placeholder="ABBA5"></div>
+            <button type="button" class="btn btn-ghost" id="ckApplyPromo" style="height:44px">Применить</button>
+          </div>
+
+          <div class="field"><label>Комментарий к заказу</label><textarea class="inp" name="comment" rows="2" placeholder="Желаемая дата доставки или номер партии"></textarea></div>
+          <button type="submit" class="btn btn-gold">Подтвердить заказ</button>
+        </form>
+
+        <div class="sum-box" id="checkoutSummary"></div>
+      </div>
+    </div>
+  </main>
+  <footer id="siteFooter" class="ft"></footer>
+</body>
+</html>

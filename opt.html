@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Дизайнерам, прорабам и оптовым клиентам — Абба Керамика</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/opt.js"></script>
+  <script defer src="assets/js/assistant.js"></script>
+</head>
+<body>
+  <header id="siteHeader" class="hd"></header>
+  <main class="sec" style="padding-top:28px">
+    <div class="wrap">
+      <div class="promo-band" style="margin-bottom:28px">
+        <div>
+          <span class="tag tag-portoro">B2B и партнёрство</span>
+          <h1 style="margin:12px 0;font-size:clamp(30px,3.6vw,44px)">Условия для дизайнеров, архитекторов и застройщиков</h1>
+          <p class="lead" style="margin:0">Подбираем образцы для проекта, резервируем объём на складах в Москве и Твери и готовим персональный прайс под ваш объект. Условия сотрудничества обсудим с менеджером.</p>
+        </div>
+        <div class="panel-card">
+          <label for="optArea" style="font-weight:600;display:block;margin-bottom:8px">Что есть на складах под ваш объём:</label>
+          <input type="range" id="optArea" min="20" max="800" step="10" value="120" style="width:100%;accent-color:var(--gold2);margin-bottom:14px">
+          <div id="optOut"></div>
+        </div>
+      </div>
+
+      <div class="panel-card" style="max-width:680px">
+        <h2 style="margin-top:0">Получить оптовый прайс и партнёрский доступ</h2>
+        <form id="optLeadForm" style="display:flex;flex-direction:column;gap:12px">
+          <div class="two-col" style="gap:12px">
+            <div class="field"><label>Имя / Студия</label><input class="inp" name="name" required placeholder="Анна, студия интерьера"></div>
+            <div class="field"><label>Телефон</label><input class="inp js-phone" name="phone" required placeholder="+7 (___) ___-__-__"></div>
+          </div>
+          <div class="field"><label>Email для прайса и текстур</label><input class="inp" type="email" name="email" placeholder="studio@example.ru"></div>
+          <div class="field"><label>Комментарий по объекту</label><textarea class="inp" name="comment" rows="3" placeholder="Примерный метраж, город отгрузки (Москва / Мытищи / Тверь)"></textarea></div>
+          <button type="submit" class="btn btn-gold">Отправить запрос менеджеру</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <footer id="siteFooter" class="ft"></footer>
+</body>
+</html>

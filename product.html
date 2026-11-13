@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Керамогранит — Абба Керамика</title>
+  <meta name="description" content="Керамогранит Абба Керамика: фото, характеристики, наличие на складах в Москве и Твери.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/product.js"></script>
+  <script defer src="assets/js/assistant.js"></script>
+</head>
+<body>
+  <header id="siteHeader" class="hd"></header>
+  <main class="sec" style="padding-top:22px">
+    <div class="wrap" id="prodRoot">
+      <nav id="prodBread" class="muted prod-bread" aria-label="Хлебные крошки"></nav>
+
+      <div class="prod-grid">
+        <div class="prod-gal">
+          <div class="gal-main" id="galMain">
+            <img id="prodMainImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="">
+            <button type="button" class="gal-nav prev" id="galPrev" aria-label="Предыдущее фото">‹</button>
+            <button type="button" class="gal-nav next" id="galNext" aria-label="Следующее фото">›</button>
+            <span class="gal-count" id="galCount"></span>
+            <span class="gal-soon" id="galSoon" hidden>Фото скоро появится</span>
+          </div>
+          <div class="gal-thumbs" id="prodThumbs"></div>
+        </div>
+
+        <div class="prod-box">
+          <div class="prod-badges" id="prodBadges"></div>
+          <h1 id="prodTitle" class="prod-title">Загрузка…</h1>
+          <div class="muted prod-sub" id="prodBrand"></div>
+
+          <div class="prod-price">
+            <b id="prodPrice"></b>
+            <span id="prodOld" class="card-old" style="font-size:16px"></span>
+          </div>
+          <div id="prodBoxInfo" class="muted" style="font-size:13.5px;margin-bottom:16px"></div>
+
+          <div class="prod-facts" id="prodFacts"></div>
+
+          <div class="prod-calc">
+            <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end">
+              <div class="field">
+                <label for="prodArea">Нужная площадь, м²</label>
+                <input type="number" id="prodArea" class="inp" value="12" min="1" step="0.5" inputmode="decimal">
+              </div>
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;padding-bottom:10px">
+                <input type="checkbox" id="prodMargin" checked> +10% на подрезку
+              </label>
+            </div>
+            <div id="prodCalcRes" style="margin-top:10px;font-size:14px"></div>
+          </div>
+
+          <div class="prod-actions">
+            <button type="button" class="btn btn-gold" id="prodAddCart" style="flex:1 1 220px">Добавить в заявку</button>
+            <button type="button" class="btn btn-portoro" id="prodAskPrice" style="flex:1 1 160px">Узнать цену</button>
+            <a href="designer.html" class="btn btn-ghost" id="prodTry3d">Примерить в 3D</a>
+          </div>
+
+          <h4 class="prod-h4">Наличие на складах</h4>
+          <div id="prodBranchStock" class="stock-rows"></div>
+
+          <p id="prodDesc" class="prod-desc"></p>
+
+          <h4 class="prod-h4">Характеристики</h4>
+          <table class="spec-tbl" id="prodSpecs"></table>
+        </div>
+      </div>
+
+      <section style="margin-top:56px">
+        <div class="sec-head" style="display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:18px">
+          <h2 style="margin:0">Похожие позиции</h2>
+          <a href="catalog.html" class="btn btn-ghost btn-sm">Весь каталог →</a>
+        </div>
+        <div class="rail" id="prodRelated"></div>
+      </section>
+    </div>
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр фото">
+      <img id="lbImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="">
+      <button type="button" class="lb-close" id="lbClose" aria-label="Закрыть">✕</button>
+      <button type="button" class="lb-prev" id="lbPrev" aria-label="Предыдущее">‹</button>
+      <button type="button" class="lb-next" id="lbNext" aria-label="Следующее">›</button>
+    </div>
+  </main>
+  <footer id="siteFooter" class="ft"></footer>
+</body>
+</html>

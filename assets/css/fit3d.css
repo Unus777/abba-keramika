@@ -1,0 +1,176 @@
+/* 3D-примерочная Абба Керамика — мягкая молочно-бежевая эстетика + Nero Portoro акценты */
+.f3-wrap {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.f3-side {
+  background: var(--sf);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.f3-stage {
+  position: relative;
+  background: #EDE4D6;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: 620px;
+  box-shadow: var(--shadow);
+}
+
+.f3-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.f3-hud {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.f3-hud > * {
+  pointer-events: auto;
+}
+
+.f3-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 253, 249, 0.92);
+  border: 1px solid var(--line-strong);
+  backdrop-filter: blur(10px);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tx);
+}
+
+.f3-botbar {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(255, 253, 249, 0.92);
+  border: 1px solid var(--line-strong);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 10px 14px;
+}
+
+.f3-presets,
+.f3-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.f3-btn {
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--sf2);
+  color: var(--tx2);
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: all 0.18s;
+}
+
+.f3-btn.on,
+.f3-btn:hover {
+  background: var(--portoro);
+  border-color: var(--portoro);
+  color: var(--gold-bright);
+}
+
+.f3-tiles {
+  max-height: 330px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding-right: 4px;
+}
+
+.f3-tile {
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 7px;
+  background: var(--bg);
+  text-align: left;
+  transition: all 0.18s;
+}
+
+.f3-tile.on,
+.f3-tile:hover {
+  border-color: var(--gold2);
+  background: var(--sf);
+  box-shadow: var(--shadow-sm);
+}
+
+.f3-tile img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 9px;
+  margin-bottom: 6px;
+}
+
+.f3-tile b {
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.25;
+}
+
+.f3-tile small {
+  font-size: 11px;
+  color: var(--mut);
+}
+
+.f3-swatches {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.f3-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--line-strong);
+}
+
+.f3-swatch.on {
+  border-color: var(--gold2);
+  transform: scale(1.1);
+}
+
+@media (max-width: 1100px) {
+  .f3-wrap {
+    grid-template-columns: 1fr;
+  }
+  .f3-stage {
+    min-height: 460px;
+  }
+}

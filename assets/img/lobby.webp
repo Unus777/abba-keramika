@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <rect width="1200" height="800" fill="#F5EFE6"/>
+  <rect x="60" y="60" width="1080" height="680" rx="24" fill="#FAF7F2" stroke="#DFD3C3" stroke-width="2"/>
+  <!-- Display cassette racks with ceramic slabs -->
+  <g transform="translate(130, 130)">
+    <rect x="0" y="0" width="220" height="440" rx="10" fill="#171411" stroke="#D4A243" stroke-width="2"/>
+    <path d="M15 390 Q90 270 205 90" fill="none" stroke="#F5C84C" stroke-width="4"/>
+    <path d="M40 120 Q110 180 195 165" fill="none" stroke="#E2A42B" stroke-width="2.2"/>
+    <rect x="260" y="0" width="220" height="440" rx="10" fill="#F3ECE1" stroke="#D5C6B0" stroke-width="2"/>
+    <path d="M275 360 Q350 250 460 110" fill="none" stroke="#C8B294" stroke-width="3"/>
+    <rect x="520" y="0" width="220" height="440" rx="10" fill="#EBE2D5" stroke="#CBBBA4" stroke-width="2"/>
+    <path d="M540 380 Q630 280 720 130" fill="none" stroke="#B59E7D" stroke-width="3"/>
+    <rect x="780" y="0" width="160" height="440" rx="10" fill="#D5C3AA" stroke="#B89F7D" stroke-width="2"/>
+  </g>
+  <text x="130" y="655" font-family="'Tenor Sans', serif" font-size="28" fill="#1E1914">ШОУ-РУМЫ «АББА КЕРАМИКА» · МЫТИЩИ · МОСКВА · ТВЕРЬ</text>
+  <text x="130" y="690" font-family="'Onest', sans-serif" font-size="17" fill="#6E6254">Экспозиция крупноформатных слэбов при естественном и тёплом архитектурном свете</text>
+</svg>

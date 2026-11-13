@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Абба Керамика — керамогранит в Мытищах, Москве и Твери</title>
+  <meta name="description" content="Керамогранит 60×60 и 60×120 в наличии на складах в Москве и Твери: мрамор, оникс, травертин, бетон и дерево. Шоу-румы Абба Керамика в Мытищах, Москве и Твери.">
+  <meta name="theme-color" content="#FAF6F0">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="uploads/tiles/catalog/VHP612441/06.jpg" fetchpriority="high">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="data.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/home.js"></script>
+  <script defer src="assets/js/assistant.js"></script>
+</head>
+<body class="home">
+  <header id="siteHeader" class="hd"></header>
+  <main>
+    <!-- HERO -->
+    <section class="hero2" id="hero">
+      <div class="wrap hero2-grid">
+        <div class="hero2-copy">
+          <div class="hero2-eyebrow" data-anim style="--i:0"><span class="hero2-dot"></span><span id="heroEyebrow">Шоу-румы и склады · Мытищи · Москва · Тверь</span></div>
+          <h1 class="hero2-title" id="heroTitle">Керамогранит, который <em>создаёт интерьер</em></h1>
+          <p class="hero2-sub" id="heroSub" data-anim style="--i:3">Мрамор, оникс, травертин, бетон и дерево в форматах 60×60 и 60×120. Остатки на складах в Москве и Твери, подбор и расчёт в шоу-руме.</p>
+          <div class="hero2-cta" data-anim style="--i:4">
+            <a href="catalog.html" class="btn btn-gold btn-lg" id="heroCtaPrimary">Смотреть каталог</a>
+            <button type="button" class="btn btn-ghost btn-lg" id="heroCtaSecondary" data-lead="Подобрать плитку с менеджером">Подобрать плитку</button>
+          </div>
+          <dl class="hero2-stats" data-anim style="--i:5">
+            <div><dt id="statSku">90</dt><dd>позиций в каталоге</dd></div>
+            <div><dt id="statStock">—</dt><dd>м² на складах сейчас</dd></div>
+            <div><dt>3</dt><dd>шоу-рума: Мытищи, Москва, Тверь</dd></div>
+          </dl>
+        </div>
+
+        <div class="hero2-stage" id="heroStage" data-anim style="--i:2" aria-roledescription="carousel" aria-label="Коллекции Абба Керамика">
+          <div class="stage-frame" id="stageFrame">
+            <div class="stage-slides" id="stageSlides"></div>
+            <div class="stage-shade"></div>
+            <a class="stage-caption" id="stageCaption" href="catalog.html">
+              <span class="stage-kicker" id="stageKicker">Коллекция сезона</span>
+              <b class="stage-name" id="stageName">Абба Керамика</b>
+              <span class="stage-meta" id="stageMeta"></span>
+              <span class="stage-go" aria-hidden="true">→</span>
+            </a>
+            <div class="stage-progress"><i id="stageProgress"></i></div>
+          </div>
+          <div class="stage-chip" id="stageChip">
+            <img id="stageChipImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="">
+            <div><small>Плитка на фото</small><b id="stageChipName"></b></div>
+          </div>
+          <div class="stage-thumbs" id="stageThumbs" role="tablist"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK PICK -->
+    <section class="sec sec-tight">
+      <div class="wrap">
+        <div class="quiz-box rv">
+          <div class="quiz-hd">
+            <div>
+              <h2>Подбор плитки за 20 секунд</h2>
+              <p class="muted">Выберите помещение, фактуру и формат — покажем подходящие позиции со складов.</p>
+            </div>
+            <a href="calc.html" class="tag tag-gold">Калькулятор упаковок, клея и затирки →</a>
+          </div>
+          <form id="homeQuiz" class="quiz-row">
+            <div class="field">
+              <label for="qRoom">Помещение</label>
+              <select class="inp" id="qRoom">
+                <option value="">Любое помещение</option>
+                <option value="bath">Ванная и санузел</option>
+                <option value="kitchen">Кухня</option>
+                <option value="living">Гостиная</option>
+                <option value="hall">Прихожая и коридор</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="qDesign">Фактура</label>
+              <select class="inp" id="qDesign">
+                <option value="">Все фактуры</option>
+                <option value="marble">Мрамор и оникс</option>
+                <option value="stone">Камень и травертин</option>
+                <option value="concrete">Бетон и терраццо</option>
+                <option value="wood">Под дерево</option>
+                <option value="plain">Однотонный</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="qSize">Формат</label>
+              <select class="inp" id="qSize">
+                <option value="">Любой формат</option>
+                <option value="60x60">60×60 см</option>
+                <option value="60x120">60×120 см</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-gold">Показать плитку</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLLECTIONS -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-hd rv">
+          <div>
+            <h2>Коллекции по фактуре</h2>
+            <p>Каждая плитка — с фотографиями в интерьере, остатками по складам и расчётом упаковок.</p>
+          </div>
+          <a href="catalog.html" class="btn btn-ghost btn-sm">Весь каталог →</a>
+        </div>
+        <div class="coll-grid rv" id="homeCollections"></div>
+      </div>
+    </section>
+
+    <!-- PRODUCT RAIL -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-hd rv">
+          <div>
+            <h2>Витрина Абба Керамика</h2>
+            <p>Актуальные позиции со складов в Москве и Твери. Цены уточняйте у менеджера — пришлём расчёт под ваш объём.</p>
+          </div>
+          <div class="tabs" id="homeTabs">
+            <button type="button" class="tab on" data-tab="stock">В наличии</button>
+            <button type="button" class="tab" data-tab="new">Новинки</button>
+            <button type="button" class="tab" data-tab="marble">Мрамор и оникс</button>
+            <button type="button" class="tab" data-tab="concrete">Бетон и камень</button>
+            <button type="button" class="tab" data-tab="large">60×120</button>
+          </div>
+        </div>
+        <div class="rail rv" id="homeRail"></div>
+      </div>
+    </section>
+
+    <!-- WHY US -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="why-grid rv">
+          <div class="why-intro">
+            <h2>Почему выбирают <em>Абба Керамика</em></h2>
+            <p class="muted">Покупка плитки — это не только красивый рисунок. Мы помогаем пройти весь путь: от выбора до доставки на объект.</p>
+            <button type="button" class="btn btn-portoro" data-lead="Консультация по подбору плитки">Получить консультацию</button>
+          </div>
+          <div class="why-item"><span class="why-n">01</span><h3>Живые образцы</h3><p>Плитку можно увидеть и потрогать в шоу-румах в Мытищах, Москве и Твери.</p></div>
+          <div class="why-item"><span class="why-n">02</span><h3>Склады в Москве и Твери</h3><p>Остатки на сайте показываются по каждому складу — без сюрпризов после оплаты.</p></div>
+          <div class="why-item"><span class="why-n">03</span><h3>Точный расчёт</h3><p>Посчитаем упаковки с запасом на подрезку, клей, затирку и систему выравнивания.</p></div>
+          <div class="why-item"><span class="why-n">04</span><h3>Доставка и подъём</h3><p>Привезём по Москве, области и Твери, поднимем на этаж. Самовывоз со склада.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOWROOMS & WAREHOUSES -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-hd rv">
+          <div>
+            <h2>Шоу-румы и склады</h2>
+            <p>Мытищи (ТСК «Яуза»), Москва (ТЦ «Люблинское поле»), Тверь (ул. Коминтерна, 44 и склад в пос. Новая Константиновка).</p>
+          </div>
+          <a href="contacts.html" class="btn btn-ghost btn-sm">Все контакты →</a>
+        </div>
+        <div class="branches-grid rv" id="homeBranchesGrid"></div>
+      </div>
+    </section>
+
+    <!-- REVIEWS (показывается, когда есть опубликованные отзывы) -->
+    <section class="sec" id="homeReviewsSec">
+      <div class="wrap">
+        <div class="sec-hd rv">
+          <div>
+            <h2>Отзывы покупателей</h2>
+            <p>Отзывы публикуются после проверки. Поделитесь впечатлением о покупке — это помогает другим.</p>
+          </div>
+          <button type="button" class="btn btn-gold btn-sm" onclick="UN.open('reviewModalBg')">Написать отзыв</button>
+        </div>
+        <div class="reviews-grid rv" id="homeReviews"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Public Review Modal -->
+  <div class="modal-bg" id="reviewModalBg">
+    <div class="modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <h3 style="margin:0;font-size:28px">Оставить отзыв</h3>
+        <button type="button" class="ic-btn" data-close="reviewModalBg">✕</button>
+      </div>
+      <form id="publicReviewForm" style="display:flex;flex-direction:column;gap:12px">
+        <div class="field"><label>Ваше имя</label><input class="inp" name="author_name" required placeholder="Например, Марина"></div>
+        <div class="two-col" style="gap:12px">
+          <div class="field"><label>Город / салон</label>
+            <select class="inp" name="author_city">
+              <option value="Москва">Москва</option>
+              <option value="Мытищи">Мытищи</option>
+              <option value="Тверь">Тверь</option>
+            </select>
+          </div>
+          <div class="field"><label>Оценка</label>
+            <select class="inp" name="rating">
+              <option value="5">★★★★★ (5)</option>
+              <option value="4">★★★★☆ (4)</option>
+              <option value="3">★★★☆☆ (3)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Какую плитку покупали</label><input class="inp" name="product_name" placeholder="Например, Травертин 60×120"></div>
+        <div class="field"><label>Ваш отзыв</label><textarea class="inp" name="text" rows="3" required placeholder="Поделитесь впечатлением о качестве и сервисе"></textarea></div>
+        <button type="submit" class="btn btn-gold">Опубликовать отзыв</button>
+      </form>
+    </div>
+  </div>
+
+  <footer id="siteFooter" class="ft"></footer>
+</body>
+</html>

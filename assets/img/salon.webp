@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="milkyWall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBF8F3"/>
+      <stop offset="50%" stop-color="#F2EAE0"/>
+      <stop offset="100%" stop-color="#E6DACB"/>
+    </linearGradient>
+    <linearGradient id="travFloor" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#EAE0D3"/>
+      <stop offset="100%" stop-color="#D9CBB8"/>
+    </linearGradient>
+    <linearGradient id="portoroSlab" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1714"/>
+      <stop offset="50%" stop-color="#0F0D0B"/>
+      <stop offset="100%" stop-color="#211C16"/>
+    </linearGradient>
+    <linearGradient id="goldV" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE27A"/>
+      <stop offset="50%" stop-color="#E2A42B"/>
+      <stop offset="100%" stop-color="#9E6B12"/>
+    </linearGradient>
+    <radialGradient id="sunlight" cx="75%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#FFFDF9" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#F5ECE0" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#E5D8C5" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Milky Alabaster Architecture -->
+  <rect width="1600" height="700" fill="url(#milkyWall)"/>
+  <polygon points="0,700 1600,700 1600,1000 0,1000" fill="url(#travFloor)"/>
+  <!-- Perspective floor tile grid in soft milky travertine -->
+  <g stroke="#CBBBA4" stroke-width="1.2" opacity="0.55">
+    <line x1="0" y1="760" x2="1600" y2="760"/>
+    <line x1="0" y1="835" x2="1600" y2="835"/>
+    <line x1="0" y1="925" x2="1600" y2="925"/>
+    <line x1="250" y1="700" x2="80" y2="1000"/>
+    <line x1="550" y1="700" x2="460" y2="1000"/>
+    <line x1="850" y1="700" x2="860" y2="1000"/>
+    <line x1="1150" y1="700" x2="1260" y2="1000"/>
+    <line x1="1450" y1="700" x2="1580" y2="1000"/>
+  </g>
+  <!-- Feature Exhibition Wall with Nero Portoro Black-Gold Marble & Milky Calacatta Slabs -->
+  <g transform="translate(820, 70)">
+    <!-- Soft shadow -->
+    <rect x="18" y="22" width="320" height="580" rx="14" fill="#B8A68E" opacity="0.35"/>
+    <!-- Slab 1: Nero Portoro Black & Yellow-Gold Marble -->
+    <rect x="0" y="0" width="320" height="580" rx="14" fill="url(#portoroSlab)" stroke="url(#goldV)" stroke-width="2.5"/>
+    <path d="M12 490 Q95 380 160 340 T308 110" fill="none" stroke="url(#goldV)" stroke-width="5"/>
+    <path d="M12 490 Q95 380 160 340 T308 110" fill="none" stroke="#FFF3B8" stroke-width="1.4" opacity="0.8"/>
+    <path d="M60 80 Q140 160 210 150 T312 270" fill="none" stroke="url(#goldV)" stroke-width="3"/>
+    <path d="M135 355 Q210 420 305 460" fill="none" stroke="#F4BE37" stroke-width="2.2" opacity="0.85"/>
+    <path d="M8 230 Q110 260 185 210" fill="none" stroke="#F7EFE0" stroke-width="1" opacity="0.35"/>
+  </g>
+  <g transform="translate(1170, 110)">
+    <rect x="14" y="18" width="290" height="540" rx="14" fill="#B8A68E" opacity="0.3"/>
+    <!-- Slab 2: Calacatta Latte Crema Milky Slab -->
+    <rect x="0" y="0" width="290" height="540" rx="14" fill="#FAF6F0" stroke="#D9C7AD" stroke-width="2"/>
+    <path d="M20 460 Q110 340 170 290 T275 80" fill="none" stroke="#D4B483" stroke-width="3.5" opacity="0.6"/>
+    <path d="M40 140 Q130 200 250 180" fill="none" stroke="#C8A26A" stroke-width="2" opacity="0.45"/>
+    <path d="M90 380 Q190 410 270 360" fill="none" stroke="#E0C59B" stroke-width="2.5" opacity="0.5"/>
+  </g>
+  <rect width="1600" height="1000" fill="url(#sunlight)"/>
+</svg>
