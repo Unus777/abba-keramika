@@ -296,3 +296,6 @@
 }
 @media (max-width: 480px) { .br-grid, .del-grid { grid-template-columns: 1fr; } .pf-span2 { grid-column: auto; } .adm-modal.small { margin: 16px; border-radius: 18px; } }
 @media (prefers-reduced-motion: reduce) { .kpi, .adm-side, .adm-toast, .save-bar { transition: none; animation: none; } }
+
+.ph.ph-fit { outline: 2px dashed var(--gold); outline-offset: -2px; background: repeating-linear-gradient(45deg,#faf6ef,#faf6ef 6px,#f3ecdf 6px,#f3ecdf 12px); }
+.ph.ph-fit img { object-fit: contain; }
