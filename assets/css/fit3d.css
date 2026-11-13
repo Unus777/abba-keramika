@@ -174,3 +174,18 @@
     min-height: 460px;
   }
 }
+
+.f3-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.f3-row2 .field, .f3-side .field { margin: 0; }
+.f3-side .field label { display: block; font-size: 12px; font-weight: 600; color: var(--mut); margin-bottom: 5px; }
+.f3-tile img { aspect-ratio: 1/1; background: var(--sf2); }
+.f3-scale { font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) {
+  .f3-side { padding: 14px; border-radius: 18px; }
+  .f3-tiles { grid-template-columns: repeat(3, 1fr); max-height: 260px; gap: 8px; }
+  .f3-tile small { display: none; }
+  .f3-stage { min-height: 420px; border-radius: 18px; }
+  .f3-botbar { padding: 8px 10px; gap: 6px; }
+  .f3-botbar .muted { display: none; }
+  .f3-hud .f3-pill { font-size: 12px; padding: 6px 10px; }
+}

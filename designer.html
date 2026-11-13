@@ -6,12 +6,12 @@
   <title>3D-примерочная плитки — Абба Керамика</title>
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/fit3d.css">
+  <link rel="stylesheet" href="assets/css/fit3d.css?v=2">
   <script defer src="assets/js/vendor/three.min.js"></script>
   <script defer src="assets/js/vendor/OrbitControls.js"></script>
   <script defer src="data.js"></script>
   <script defer src="assets/js/app.js"></script>
-  <script defer src="assets/js/fit3d.js"></script>
+  <script defer src="assets/js/fit3d.js?v=2"></script>
 </head>
 <body>
   <header id="siteHeader" class="hd"></header>
@@ -21,7 +21,7 @@
         <div>
           <span class="tag tag-portoro">Онлайн-студия Абба Керамика</span>
           <h1 style="margin:8px 0 6px;font-size:clamp(28px,3.4vw,42px)">3D-примерочная керамогранита</h1>
-          <p class="muted" style="margin:0">Выберите помещение, примерьте мрамор, травертин или бетон из каталога на пол и стены, настройте цвет затирки.</p>
+          <p class="muted" style="margin:0">Выберите помещение, примерьте мрамор, травертин или бетон из каталога на пол и стены, настройте цвет и ширину шва и раскладку — в реальном масштабе плитки.</p>
         </div>
         <button type="button" class="btn btn-gold btn-sm" data-lead="Заказать 3D-визуализацию проекта">Заказать проект у дизайнера</button>
       </div>
@@ -40,12 +40,31 @@
             <div class="f3-swatches" id="f3Grout"></div>
           </div>
 
+          <div class="f3-row2">
+            <div class="field">
+              <label for="f3Pattern">Раскладка</label>
+              <select id="f3Pattern" class="inp">
+                <option value="grid">Прямая (шов в шов)</option>
+                <option value="half">Со смещением 1/2</option>
+                <option value="third">Палубная (на 1/3)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f3Seam">Ширина шва</label>
+              <select id="f3Seam" class="inp">
+                <option value="1.5">1,5 мм</option>
+                <option value="2" selected>2 мм</option>
+                <option value="3">3 мм</option>
+                <option value="5">5 мм</option>
+              </select>
+            </div>
+          </div>
           <div class="field">
-            <label for="f3Pattern">Раскладка</label>
-            <select id="f3Pattern" class="inp">
-              <option value="grid">Прямая (шов в шов)</option>
-              <option value="half">Со смещением 50%</option>
-              <option value="third">Палубная (на 1/3)</option>
+            <label for="f3Orient">Ориентация 60×120</label>
+            <select id="f3Orient" class="inp">
+              <option value="auto">Авто: пол — вдоль, стены — вертикально</option>
+              <option value="long-x">Длинной стороной горизонтально</option>
+              <option value="long-y">Длинной стороной вертикально</option>
             </select>
           </div>
 
@@ -63,7 +82,8 @@
               <button type="button" class="f3-btn" data-rm="kitchen">Кухня</button>
               <button type="button" class="f3-btn" data-rm="living">Гостиная</button>
             </div>
-            <span class="muted" style="font-size:12px;align-self:center">Крутите сцену мышью или пальцем</span>
+            <span class="muted f3-scale" id="f3Scale" style="font-size:12px;align-self:center"></span>
+            <span class="muted" style="font-size:12px;align-self:center">Крутите сцену мышью или пальцем · колесо — приближение</span>
           </div>
         </div>
       </div>
