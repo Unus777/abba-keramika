@@ -53,6 +53,23 @@
   };
 
   var ICONS = {
+    pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+    chev: '<svg class="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>',
+    chevl: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>',
+    chevr: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>',
+    store: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 9.5V20h16V9.5"/><path d="M3 9.5 5 4h14l2 5.5a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z"/><path d="M10 20v-5h4v5"/></svg>',
+    box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 3 8.5 4.5v9L12 21l-8.5-4.5v-9L12 3Z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></svg>',
+    truck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 6h11v10h-11zM13.5 9.5h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+    ruler: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="7" width="18" height="10" rx="1.5"/><path d="M7 7v3.5M11 7v5M15 7v3.5M19 7v5"/></svg>',
+    layers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>',
+    drop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3s6 6.4 6 11a6 6 0 0 1-12 0c0-4.6 6-11 6-11Z"/></svg>',
+    home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/></svg>',
+    share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="m8.2 10.8 7.6-4.1M8.2 13.2l7.6 4.1"/></svg>',
+    chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v11H9l-5 4V5Z"/></svg>',
+    filter: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M7 12h10M10 18h4"/></svg>',
+    g3: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="9.5" y="3" width="5" height="5" rx="1"/><rect x="16" y="3" width="5" height="5" rx="1"/><rect x="3" y="10" width="5" height="5" rx="1"/><rect x="9.5" y="10" width="5" height="5" rx="1"/><rect x="16" y="10" width="5" height="5" rx="1"/></svg>',
+    g2: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="1.3"/><rect x="13" y="3" width="8" height="8" rx="1.3"/><rect x="3" y="13" width="8" height="8" rx="1.3"/><rect x="13" y="13" width="8" height="8" rx="1.3"/></svg>',
     search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>',
     heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 20.5s-7.5-4.7-9.2-9.4C1.6 7.8 3.9 4.5 7.4 4.5c2 0 3.5 1 4.6 2.5 1.1-1.5 2.6-2.5 4.6-2.5 3.5 0 5.8 3.3 4.6 6.6-1.7 4.7-9.2 9.4-9.2 9.4Z"/></svg>',
     cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 4h2l2.4 10.5a1.5 1.5 0 0 0 1.5 1.2h8.8a1.5 1.5 0 0 0 1.4-1.1L21 8H7"/><circle cx="10" cy="19.5" r="1.5"/><circle cx="18" cy="19.5" r="1.5"/></svg>',
@@ -480,44 +497,48 @@
 
   function card(p) {
     if (!p) return '';
-    var hasPhoto = Array.isArray(p.imgs) && p.imgs.length > 0;
+    var hasPhoto = Array.isArray(p.imgs) && p.imgs.length > 0 && !p.nophoto;
     var tags = p.tags || [];
     var badges = [];
-    if (tags.indexOf('new') >= 0) badges.push('<span class="c-badge new">Новинка</span>');
-    if (p.old && p.old > p.price && hasPrice(p)) badges.push('<span class="c-badge sale">-' + Math.round((1 - p.price / p.old) * 100) + '%</span>');
-    if ((tags.indexOf('hit') >= 0)) badges.push('<span class="c-badge hit">Хит</span>');
-
+    if (tags.indexOf('new') >= 0) badges.push('<span class="pc-badge new">Новинка</span>');
+    if (tags.indexOf('hit') >= 0) badges.push('<span class="pc-badge hit">Хит</span>');
+    if (p.old && p.old > p.price && hasPrice(p)) badges.push('<span class="pc-badge sale">−' + Math.round((1 - p.price / p.old) * 100) + '%</span>');
     var favOn = favs.has(p.id) ? ' on' : '';
     var inCart = cart.list().some(function (x) { return x.id === p.id; });
     var first = img(p);
-    var secondImg = (hasPhoto && p.imgs.length > 3) ? p.imgs[Math.min(p.imgs.length - 1, 4)] : (hasPhoto && p.imgs.length > 1 ? p.imgs[1] : '');
+    var secondImg = hasPhoto && p.imgs.length > 1 ? p.imgs[Math.min(p.imgs.length - 1, p.imgs.length > 3 ? 4 : 1)] : '';
     if (secondImg === first) secondImg = '';
     var si = stockInfo(p);
+    var coll = String(p.coll || '').replace(/^Коллекция\s+/, '');
     var media = hasPhoto
-      ? '      <img class="i1" src="' + esc(thumb(first)) + '" alt="' + esc(p.name + ' ' + size(p)) + '" loading="lazy" decoding="async">' +
+      ? '<img class="i1" src="' + esc(thumb(first)) + '" alt="' + esc('Керамогранит ' + p.name + ' ' + size(p)) + '" loading="lazy" decoding="async">' +
         (secondImg ? '<img class="i2" src="' + esc(thumb(secondImg)) + '" alt="" loading="lazy" decoding="async">' : '')
-      : '      <div class="card-nophoto"><img src="' + esc(first) + '" alt="" loading="lazy"><span>Фото скоро появится</span></div>';
+      : '<div class="pc-nophoto"><img src="' + esc(first) + '" alt="" loading="lazy"><span>Фото скоро появится</span></div>';
+    var chips = [p.surf, label('designs', p.design), p.th ? String(p.th).replace('.', ',') + ' мм' : ''].filter(Boolean).slice(0, 3);
     return (
-      '<article class="card" data-id="' + esc(p.id) + '">' +
-      '  <div class="card-img">' +
-      '    <a href="' + url(p) + '" aria-label="' + esc(p.name) + '">' + media + '</a>' +
-      '    <div class="card-badges">' + badges.join('') + '</div>' +
-      '    <button type="button" class="c-fav' + favOn + '" data-id="' + esc(p.id) + '" aria-label="В избранное">' + ic('heart') + '</button>' +
+      '<article class="pc" data-id="' + esc(p.id) + '">' +
+      '  <div class="pc-img">' +
+      '    <a href="' + url(p) + '" class="pc-media" aria-label="' + esc(p.name) + '">' + media + '</a>' +
+      '    <span class="pc-size">' + esc(p.w && p.h ? p.w + '×' + p.h : '') + '</span>' +
+      '    <div class="pc-badges">' + badges.join('') + '</div>' +
+      '    <div class="pc-tools">' +
+      '      <button type="button" class="c-fav pc-tool' + favOn + '" data-id="' + esc(p.id) + '" aria-label="В избранное" title="В избранное">' + ic('heart') + '</button>' +
+      (p.tex || p.fitting_img ? '      <a class="pc-tool" href="designer.html?tile=' + encodeURIComponent(p.id) + '" aria-label="Примерить в 3D" title="Примерить в 3D">' + ic('cube') + '</a>' : '') +
+      '    </div>' +
       '  </div>' +
-      '  <div class="card-body">' +
-      '    <div class="card-meta"><span>' + esc(size(p)) + '</span><span>' + esc(p.surf || '') + '</span></div>' +
-      '    <h3 class="card-title"><a href="' + url(p) + '">' + esc(p.name) + '</a></h3>' +
-      '    <div class="card-stock ' + si.cls + '"><i></i>' + esc(si.text) + '</div>' +
-      '    <div class="card-foot">' +
-      '      <div class="card-price">' +
+      '  <div class="pc-body">' +
+      '    <div class="pc-series">' + esc(coll ? 'Коллекция ' + coll : 'Керамогранит') + '</div>' +
+      '    <h3 class="pc-title"><a href="' + url(p) + '">' + esc(p.name) + '</a> <span>' + esc(size(p)) + '</span></h3>' +
+      '    <div class="pc-chips">' + chips.map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') + '</div>' +
+      '    <div class="pc-foot">' +
+      '      <div class="pc-price">' +
       (hasPrice(p)
-        ? (p.old && p.old > p.price ? '<span class="card-old">' + rub(p.old) + '</span>' : '') + '<b>' + rub(p.price) + '</b> <small>/ м²</small>'
+        ? (p.old && p.old > p.price ? '<s>' + rub(p.old) + '</s>' : '') + '<b>' + rub(p.price) + '</b><small> / м²</small>'
         : '<b class="ask">Цена по запросу</b>') +
       '      </div>' +
-      '      <div class="card-act">' +
-      '        <button type="button" class="btn-cart' + (inCart ? ' in' : '') + '" data-add="' + esc(p.id) + '">' + (inCart ? 'В корзине ✓' : (hasPrice(p) ? 'В корзину' : 'В заявку')) + '</button>' +
-      '      </div>' +
+      '      <button type="button" class="btn-cart pc-buy' + (inCart ? ' in' : '') + '" data-add="' + esc(p.id) + '">' + ic('cart') + '<span>' + (inCart ? 'В корзине ✓' : (hasPrice(p) ? 'В корзину' : 'В заявку')) + '</span></button>' +
       '    </div>' +
+      '    <div class="pc-stock ' + si.cls + '">' + esc(si.text) + '</div>' +
       '  </div>' +
       '</article>'
     );
@@ -709,131 +730,177 @@
     var page = location.pathname.split('/').pop() || 'index.html';
 
     var hd = d.getElementById('siteHeader');
+    var PRODS = (BASE.products || []).filter(function (p) { return !p.is_hidden; });
+    function cnt(fn) { return PRODS.filter(fn).length; }
+    var sizes = {};
+    PRODS.forEach(function (p) { if (p.w && p.h) { var k = p.w + 'x' + p.h; sizes[k] = (sizes[k] || 0) + 1; } });
+    var sizeKeys = Object.keys(sizes).sort(function (a, b) { return sizes[b] - sizes[a]; });
+    var DESIGNS = ['marble', 'stone', 'concrete', 'wood', 'plain'];
+    var COLORS = [['white', '#F3F0EA'], ['beige', '#D9C7A8'], ['grey', '#A3A29E'], ['brown', '#8A6146'], ['dark', '#2C2C2C'], ['color', 'linear-gradient(135deg,#C79A5B,#5E7C76)']];
+    var TICKER = [
+      'Живые образцы плитки в 3 шоу-румах: Мытищи · Москва · Тверь',
+      'Остатки по складам в Москве и Твери — прямо в карточке товара',
+      'Бесплатно посчитаем упаковки, клей и затирку под ваш метраж',
+      'Доставка по Москве, области и Твери · самовывоз со склада'
+    ];
+    var navA = function (href, text) { return '<a href="' + href + '" class="mgh-a' + (page === href ? ' on' : '') + '">' + text + '</a>'; };
     if (hd) {
-      hd.className = 'hd';
+      hd.className = 'mgh';
       hd.innerHTML =
-        '<div class="hd-portoro">' +
-        '  <div class="wrap">' +
-        '    <div class="hd-branches">' +
+        '<div class="mgh-top">' +
+        '  <div class="wrap mgh-top-in">' +
+        '    <div class="mgh-top-l">' +
+        '      <div class="mgh-city">' +
+        '        <button type="button" class="mgh-city-btn" id="cityToggle" aria-haspopup="true">' + ic('pin') + '<span data-active-city>' + esc(activeB.short_name) + '</span>' + ic('chev') + '</button>' +
+        '        <div class="mgh-city-pop" id="cityPop" role="menu">' +
+        '          <b class="mgh-city-h">Выберите салон</b>' +
         brs.map(function (b) {
-          return '<button type="button" class="hd-branch-btn' + (b.id === activeB.id ? ' active' : '') + '" data-branch="' + esc(b.id) + '"><span class="hd-branch-dot"></span><span>' + esc(b.city) + ' · ' + esc(b.phone) + '</span></button>';
+          return '<button type="button" class="hd-branch-btn' + (b.id === activeB.id ? ' active' : '') + '" data-branch="' + esc(b.id) + '"><span class="hd-branch-dot"></span><span><b>' + esc(b.short_name) + '</b><small>' + esc(b.phone) + ' · ' + esc(b.hours || '') + '</small></span></button>';
         }).join('') +
+        '        </div>' +
+        '      </div>' +
+        '      <a href="calc.html">Калькулятор</a>' +
+        '      <a href="opt.html">Дизайнерам и опт</a>' +
         '    </div>' +
-        '    <div class="hd-top-links">' +
-        '      <a href="delivery.html">Доставка Москва · МО · Тверь</a>' +
-        '      <a href="contacts.html">3 шоу-рума и склада</a>' +
-        '      <a href="tel:' + esc(activeB.phone_tel) + '" class="hd-top-phone" data-active-phone>' + esc(activeB.phone) + '</a>' +
+        '    <div class="mgh-ticker" aria-live="polite">' +
+        '      <button type="button" class="mgh-tk-btn" data-tk="-1" aria-label="Предыдущее">' + ic('chevl') + '</button>' +
+        '      <span class="mgh-tk-txt" id="tickerTxt">' + esc(TICKER[0]) + '</span>' +
+        '      <button type="button" class="mgh-tk-btn" data-tk="1" aria-label="Следующее">' + ic('chevr') + '</button>' +
+        '    </div>' +
+        '    <div class="mgh-top-r">' +
+        '      <a href="about.html">О компании</a>' +
+        '      <a href="delivery.html">Доставка</a>' +
+        '      <a href="contacts.html">Контакты</a>' +
+        '      <a href="tel:' + esc(activeB.phone_tel) + '" class="mgh-top-phone" data-active-phone>' + esc(activeB.phone) + '</a>' +
         '    </div>' +
         '  </div>' +
         '</div>' +
-        '<div class="wrap hd-in">' +
-        '  <a href="index.html" class="brand">' +
-        '    <span class="brand-mark"><img src="assets/img/favicon.svg" alt="Абба Керамика"></span>' +
-        '    <span class="brand-txt"><b>Абба Керамика</b><small>Керамогранит · 3 склада</small></span>' +
-        '  </a>' +
-        '  <nav class="nav" aria-label="Основное меню">' +
-        '    <button type="button" class="nav-a nav-cat-btn" id="megaToggle">' + ic('grid') + '<span>Каталог</span></button>' +
-        '    <a href="designer.html" class="nav-a' + (page === 'designer.html' ? ' on' : '') + '">3D-примерочная</a>' +
-        '    <a href="calc.html" class="nav-a' + (page === 'calc.html' ? ' on' : '') + '">Калькулятор</a>' +
-        '    <a href="opt.html" class="nav-a' + (page === 'opt.html' ? ' on' : '') + '">Дизайнерам и опт</a>' +
-        '    <a href="masters.html" class="nav-a' + (page === 'masters.html' ? ' on' : '') + '">Мастера</a>' +
-        '    <a href="contacts.html" class="nav-a' + (page === 'contacts.html' ? ' on' : '') + '">Салоны и склады</a>' +
-        '    <div class="nav-more-wrap">' +
-        '      <button type="button" class="nav-a" id="moreToggle">Ещё ▾</button>' +
-        '      <div class="nav-more" id="navMore">' +
-        '        <a href="about.html">О компании Абба Керамика</a>' +
-        '        <a href="delivery.html">Доставка и самовывоз</a>' +
-        '        <a href="account.html">Личный кабинет и бонусы</a>' +
+        '<div class="mgh-main">' +
+        '  <div class="wrap mgh-in">' +
+        '    <button type="button" class="mgh-ic mgh-burger" id="openMobNav" aria-label="Меню">' + ic('menu') + '</button>' +
+        '    <nav class="mgh-nav" aria-label="Основное меню">' +
+        '      <button type="button" class="mgh-a mgh-cat" id="megaToggle" aria-expanded="false"><span>Каталог</span>' + ic('chev') + '</button>' +
+        '      ' + navA('designer.html', '3D-примерочная') +
+        '      ' + navA('delivery.html', 'Доставка') +
+        '      ' + navA('contacts.html', 'Салоны') +
+        '      <div class="nav-more-wrap"><button type="button" class="mgh-a" id="moreToggle">Ещё' + ic('chev') + '</button>' +
+        '        <div class="nav-more" id="navMore">' +
+        '          <a href="calc.html">Калькулятор расхода</a>' +
+        '          <a href="about.html">О компании</a>' +
+        '          <a href="opt.html">Дизайнерам и опт</a>' +
+        '          <a href="masters.html">Мастера по укладке</a>' +
+        '          <a href="account.html">Личный кабинет и бонусы</a>' +
+        '        </div>' +
         '      </div>' +
+        '    </nav>' +
+        '    <a href="index.html" class="mgh-logo" aria-label="Абба Керамика — на главную">' +
+        '      <img src="assets/img/mark.svg" alt="" width="40" height="40">' +
+        '      <span><b>АББА</b><small>керамика</small></span>' +
+        '    </a>' +
+        '    <div class="mgh-act">' +
+        '      <button type="button" class="mgh-ic" id="openSearch" aria-label="Поиск">' + ic('search') + '</button>' +
+        '      <a href="account.html" class="mgh-ic mgh-hide-m" aria-label="Личный кабинет">' + ic('user') + '</a>' +
+        '      <a href="account.html#favs" class="mgh-ic mgh-hide-m" aria-label="Избранное">' + ic('heart') + '<span class="badge-n zero" data-fav-count></span></a>' +
+        '      <button type="button" class="mgh-ic" id="openCart" aria-label="Корзина">' + ic('cart') + '<span class="badge-n zero" data-cart-count></span></button>' +
+        '      <button type="button" class="mg-btn mg-btn-dark mg-btn-sm" id="openFastLead">Заказать расчёт</button>' +
         '    </div>' +
-        '  </nav>' +
-        '  <div class="hd-act">' +
-        '    <button type="button" class="ic-btn" id="openSearch" aria-label="Поиск">' + ic('search') + '</button>' +
-        '    <a href="account.html#favs" class="ic-btn" aria-label="Избранное">' + ic('heart') + '<span class="badge-n zero" data-fav-count></span></a>' +
-        '    <button type="button" class="ic-btn" id="openCart" aria-label="Корзина">' + ic('cart') + '<span class="badge-n zero" data-cart-count></span></button>' +
-        '    <button type="button" class="btn btn-gold btn-sm" id="openFastLead">Заказать расчёт</button>' +
-        '    <button type="button" class="ic-btn burger" id="openMobNav" aria-label="Меню">' + ic('menu') + '</button>' +
         '  </div>' +
-        '</div>' +
-        '<div class="mega" id="megaMenu">' +
-        '  <div class="wrap mega-grid">' +
-        '    <div class="mega-col"><h4>По дизайну</h4>' +
-        '      <a href="catalog.html?design=marble"><span>Под мрамор</span><span>→</span></a>' +
-        '      <a href="catalog.html?design=stone"><span>Камень и травертин</span><span>→</span></a>' +
-        '      <a href="catalog.html?design=wood"><span>Под дерево</span><span>→</span></a>' +
-        '      <a href="catalog.html?design=concrete"><span>Бетон и терраццо</span><span>→</span></a>' +
-        '      <a href="catalog.html?design=plain"><span>Однотонный</span><span>→</span></a>' +
-        '    </div>' +
-        '    <div class="mega-col"><h4>По цвету</h4>' +
-        '      <a href="catalog.html?color=beige"><span>Тёплый беж и крем</span><span>→</span></a>' +
-        '      <a href="catalog.html?color=white"><span>Молочный белый</span><span>→</span></a>' +
-        '      <a href="catalog.html?color=dark"><span>Графит и тёмные</span><span>→</span></a>' +
-        '      <a href="catalog.html?color=grey"><span>Серый и графит</span><span>→</span></a>' +
-        '      <a href="catalog.html?color=brown"><span>Коричневый</span><span>→</span></a>' +
-        '      <a href="catalog.html?color=color"><span>Оникс и акцентные</span><span>→</span></a>' +
-        '    </div>' +
-        '    <div class="mega-col"><h4>По зоне укладки</h4>' +
-        '      <a href="catalog.html?room=bath"><span>Ванная комната</span><span>→</span></a>' +
-        '      <a href="catalog.html?room=kitchen"><span>Кухня и фартук</span><span>→</span></a>' +
-        '      <a href="catalog.html?room=living"><span>Гостиная</span><span>→</span></a>' +
-        '      <a href="catalog.html?room=hall"><span>Прихожая и коридор</span><span>→</span></a>' +
-        '      <a href="catalog.html?size=60x120"><span>Крупный формат 60×120</span><span>→</span></a>' +
-        '    </div>' +
-        '    <div class="mega-promo">' +
-        '      <div>' +
-        '        <span class="portoro-badge">Новинки сезона</span>' +
-        '        <b style="margin-top:10px">Живые образцы в 3 салонах</b>' +
-        '        <p>Мытищи · Москва (Люблинское поле) · Тверь (ул. Коминтерна и склад Новая Константиновка)</p>' +
+        '  <div class="mega" id="megaMenu">' +
+        '    <div class="wrap mega-grid">' +
+        '      <div class="mega-col"><h4>Формат</h4>' +
+        sizeKeys.map(function (k) { return '<a href="catalog.html?size=' + k + '"><span>' + k.replace('x', '×') + ' см</span><small>' + sizes[k] + '</small></a>'; }).join('') +
+        '        <a href="catalog.html"><span>Весь каталог</span><small>' + PRODS.length + '</small></a>' +
         '      </div>' +
-        '      <a href="designer.html" class="btn btn-gold btn-sm">Открыть 3D-примерочную</a>' +
+        '      <div class="mega-col"><h4>Фактура</h4>' +
+        DESIGNS.map(function (k) { var n = cnt(function (p) { return p.design === k; }); return n ? '<a href="catalog.html?design=' + k + '"><span>' + esc(label('designs', k)) + '</span><small>' + n + '</small></a>' : ''; }).join('') +
+        '      </div>' +
+        '      <div class="mega-col"><h4>Цвет</h4>' +
+        COLORS.map(function (c) { var n = cnt(function (p) { return p.cg === c[0]; }); return n ? '<a href="catalog.html?color=' + c[0] + '"><span><i class="mg-sw" style="background:' + c[1] + '"></i>' + esc(label('colors', c[0])) + '</span><small>' + n + '</small></a>' : ''; }).join('') +
+        '      </div>' +
+        '      <div class="mega-col"><h4>Помещение</h4>' +
+        ['bath', 'kitchen', 'living', 'hall'].map(function (k) { return '<a href="catalog.html?room=' + k + '"><span>' + esc(label('rooms', k)) + '</span><small>' + cnt(function (p) { return (p.rooms || []).indexOf(k) >= 0; }) + '</small></a>'; }).join('') +
+        '        <a href="catalog.html?flag=new"><span>Новинки</span><small>' + cnt(function (p) { return (p.tags || []).indexOf('new') >= 0; }) + '</small></a>' +
+        '        <a href="catalog.html?flag=stock"><span>В наличии на складе</span><small>' + cnt(function (p) { return p.stock_status === 'in_stock'; }) + '</small></a>' +
+        '      </div>' +
+        '      <a class="mega-promo" href="designer.html">' +
+        '        <span class="mg-kicker">3D-примерочная</span>' +
+        '        <b>Примерьте плитку в своей ванной, кухне или гостиной</b>' +
+        '        <span class="mg-link">Открыть примерочную →</span>' +
+        '      </a>' +
         '    </div>' +
         '  </div>' +
         '</div>';
+
+      // бегущая строка
+      var tkI = 0, tkEl = hd.querySelector('#tickerTxt'), tkT = null;
+      var tkGo = function (dir) {
+        tkI = (tkI + dir + TICKER.length) % TICKER.length;
+        tkEl.classList.add('out');
+        setTimeout(function () { tkEl.textContent = TICKER[tkI]; tkEl.classList.remove('out'); }, 220);
+      };
+      var tkPlay = function () { clearInterval(tkT); tkT = setInterval(function () { if (!d.hidden) tkGo(1); }, 5000); };
+      hd.querySelectorAll('[data-tk]').forEach(function (b) { b.onclick = function () { tkGo(Number(b.dataset.tk)); tkPlay(); }; });
+      tkPlay();
+      var ct = hd.querySelector('#cityToggle'), cp = hd.querySelector('#cityPop');
+      if (ct && cp) {
+        ct.onclick = function (e) { e.stopPropagation(); cp.classList.toggle('open'); };
+        d.addEventListener('click', function (e) { if (!cp.contains(e.target)) cp.classList.remove('open'); });
+        cp.addEventListener('click', function (e) { if (e.target.closest('.hd-branch-btn')) setTimeout(function () { cp.classList.remove('open'); }, 50); });
+      }
     }
 
     var ft = d.getElementById('siteFooter');
     if (ft) {
-      ft.className = 'ft';
+      ft.className = 'mgf';
       ft.innerHTML =
-        '<div class="wrap">' +
-        '  <div class="ft-grid">' +
-        '    <div>' +
-        '      <a href="index.html" class="ft-logo" aria-label="Абба Керамика — на главную"><img src="assets/img/logo.svg" alt="Абба Керамика"></a>' +
-        '      <p class="muted" style="font-size:13.5px;max-width:340px">Керамогранит 60×60 и 60×120, клей и затирка. Шоу-румы в Мытищах, Москве и Твери, склады в Москве и Твери.</p>' +
-        '      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">' +
-        '        <a href="catalog.html" class="tag tag-gold">Каталог керамогранита</a>' +
-        '        <a href="designer.html" class="tag">3D-примерочная</a>' +
-        '      </div>' +
+        '<div class="mgf-adv">' +
+        '  <div class="wrap mgf-adv-in">' +
+        '    <div>' + ic('store') + '<b>3 шоу-рума</b><span>Мытищи · Москва · Тверь</span></div>' +
+        '    <div>' + ic('box') + '<b>Склады в Москве и Твери</b><span>Остатки видно на сайте</span></div>' +
+        '    <div>' + ic('calc') + '<b>Бесплатный расчёт</b><span>Упаковки, клей, затирка</span></div>' +
+        '    <div>' + ic('truck') + '<b>Доставка и подъём</b><span>Москва, МО и Тверь</span></div>' +
+        '  </div>' +
+        '</div>' +
+        '<div class="mgf-main">' +
+        '  <div class="wrap mgf-grid">' +
+        '    <div class="mgf-col"><h4>Каталог</h4>' +
+        sizeKeys.map(function (k) { return '<a href="catalog.html?size=' + k + '">Керамогранит ' + k.replace('x', '×') + '</a>'; }).join('') +
+        DESIGNS.slice(0, 4).map(function (k) { return '<a href="catalog.html?design=' + k + '">' + esc(label('designs', k)) + '</a>'; }).join('') +
         '    </div>' +
-        '    <div><h4>Покупателям</h4>' +
-        '      <a href="catalog.html">Каталог плитки</a>' +
+        '    <div class="mgf-col"><h4>Покупателям</h4>' +
+        '      <a href="designer.html">3D-примерочная</a>' +
         '      <a href="calc.html">Калькулятор расхода</a>' +
         '      <a href="delivery.html">Доставка и самовывоз</a>' +
-        '      <a href="masters.html">Каталог мастеров</a>' +
+        '      <a href="masters.html">Мастера по укладке</a>' +
         '      <a href="account.html">Бонусы и заказы</a>' +
-        '    </div>' +
-        '    <div><h4>Компания</h4>' +
-        '      <a href="about.html">О нас</a>' +
-        '      <a href="opt.html">Дизайнерам и оптовикам</a>' +
-        '      <a href="contacts.html">Все салоны и склады</a>' +
+        '      <a href="opt.html">Дизайнерам и опт</a>' +
+        '      <a href="about.html">О компании</a>' +
         '      <a href="privacy.html">Политика конфиденциальности</a>' +
         '    </div>' +
-        '    <div><h4>Наши салоны и склады</h4>' +
+        '    <div class="mgf-col mgf-salons"><h4>Салоны и склады</h4>' +
         brs.map(function (b) {
           return (
-            '<div style="margin-bottom:12px;font-size:13px">' +
-            '  <b style="display:block;color:var(--tx)">' + esc(b.city) + ' · <a href="tel:' + esc(b.phone_tel) + '" style="display:inline;color:var(--gold2)">' + esc(b.phone) + '</a></b>' +
-            '  <span class="muted">' + esc(b.address) + '</span><br>' +
-            (b.warehouse_address ? '<span class="muted">' + esc(b.warehouse_address) + '</span><br>' : '') +
-            '  <a href="mailto:' + esc(b.email) + '" style="font-size:12px">' + esc(b.email) + '</a>' +
+            '<div class="mgf-salon">' +
+            '  <b>' + esc(b.city) + '</b>' +
+            '  <span>' + esc(b.address) + '</span>' +
+            (b.warehouse_address ? '  <span>' + esc(b.warehouse_address) + '</span>' : '') +
+            '  <a href="tel:' + esc(b.phone_tel) + '" class="mgf-tel">' + esc(b.phone) + '</a>' +
+            '  <a href="mailto:' + esc(b.email) + '">' + esc(b.email) + '</a>' +
             '</div>'
           );
         }).join('') +
         '    </div>' +
+        '    <div class="mgf-col mgf-cta">' +
+        '      <a href="index.html" class="mgh-logo mgf-logo" aria-label="Абба Керамика"><img src="assets/img/mark.svg" alt="" width="40" height="40"><span><b>АББА</b><small>керамика</small></span></a>' +
+        '      <p>Керамогранит 60×60 и 60×120 со складов в Москве и Твери. Подбор, расчёт и доставка.</p>' +
+        '      <a href="tel:' + esc(activeB.phone_tel) + '" class="mgf-big" data-active-phone>' + esc(activeB.phone) + '</a>' +
+        '      <a href="mailto:' + esc(activeB.email) + '" class="mgf-mail" data-active-email>' + esc(activeB.email) + '</a>' +
+        '      <button type="button" class="mg-btn mg-btn-light" data-lead="Заказать бесплатный расчёт плитки" data-lead-type="Расчёт с сайта">Получить расчёт ↗</button>' +
+        '    </div>' +
         '  </div>' +
-        '  <div class="ft-bot">' +
+        '  <div class="wrap mgf-bot">' +
         '    <span>© ' + new Date().getFullYear() + ' Абба Керамика. Все права защищены.</span>' +
-        '    <span>Мытищи · Москва · Тверь</span>' +
+        '    <span>Цены и наличие уточняйте у менеджера салона</span>' +
         '  </div>' +
         '</div>';
     }
@@ -878,28 +945,36 @@
         '    </form>' +
         '  </div>' +
         '</div>' +
-        '<div class="modal-bg" id="mobMenuBg">' +
-        '  <div class="modal">' +
-        '    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><b>Меню Абба Керамика</b><button type="button" class="ic-btn" data-close="mobMenuBg">' + ic('close') + '</button></div>' +
-        '    <div style="display:flex;flex-direction:column;gap:8px">' +
-        '      <a href="catalog.html" class="btn btn-portoro">Каталог керамогранита</a>' +
-        '      <a href="designer.html" class="btn btn-ghost">3D-примерочная</a>' +
-        '      <a href="calc.html" class="btn btn-ghost">Калькулятор расхода</a>' +
-        '      <a href="opt.html" class="btn btn-ghost">Дизайнерам и опт</a>' +
-        '      <a href="masters.html" class="btn btn-ghost">Каталог мастеров</a>' +
-        '      <a href="contacts.html" class="btn btn-ghost">Салоны: Мытищи · Москва · Тверь</a>' +
-        '      <a href="about.html" class="btn btn-ghost">О компании</a>' +
-        '      <a href="delivery.html" class="btn btn-ghost">Доставка</a>' +
-        '      <a href="account.html" class="btn btn-ghost">Личный кабинет</a>' +
+        '<div class="modal-bg mg-side-bg" id="mobMenuBg">' +
+        '  <aside class="mg-side" aria-label="Меню">' +
+        '    <div class="mg-side-hd"><a href="index.html" class="mgh-logo"><img src="assets/img/mark.svg" alt="" width="34" height="34"><span><b>АББА</b><small>керамика</small></span></a><button type="button" class="mgh-ic" data-close="mobMenuBg" aria-label="Закрыть">' + ic('close') + '</button></div>' +
+        '    <div class="mg-side-bd">' +
+        '      <a href="catalog.html" class="mg-side-main">' + ic('grid') + '<span>Весь каталог</span><small>' + PRODS.length + '</small></a>' +
+        '      <details class="mg-acc" open><summary>Формат</summary><div>' + sizeKeys.map(function (k) { return '<a href="catalog.html?size=' + k + '">' + k.replace('x', '×') + ' см <small>' + sizes[k] + '</small></a>'; }).join('') + '</div></details>' +
+        '      <details class="mg-acc"><summary>Фактура</summary><div>' + DESIGNS.map(function (k) { var n = cnt(function (p) { return p.design === k; }); return n ? '<a href="catalog.html?design=' + k + '">' + esc(label('designs', k)) + ' <small>' + n + '</small></a>' : ''; }).join('') + '</div></details>' +
+        '      <details class="mg-acc"><summary>Цвет</summary><div>' + COLORS.map(function (c) { var n = cnt(function (p) { return p.cg === c[0]; }); return n ? '<a href="catalog.html?color=' + c[0] + '"><span><i class="mg-sw" style="background:' + c[1] + '"></i>' + esc(label('colors', c[0])) + '</span> <small>' + n + '</small></a>' : ''; }).join('') + '</div></details>' +
+        '      <nav class="mg-side-links">' +
+        '        <a href="designer.html">' + ic('cube') + '3D-примерочная</a>' +
+        '        <a href="calc.html">' + ic('calc') + 'Калькулятор расхода</a>' +
+        '        <a href="delivery.html">' + ic('truck') + 'Доставка и самовывоз</a>' +
+        '        <a href="contacts.html">' + ic('pin') + 'Салоны и склады</a>' +
+        '        <a href="opt.html">' + ic('store') + 'Дизайнерам и опт</a>' +
+        '        <a href="about.html">' + ic('box') + 'О компании</a>' +
+        '        <a href="account.html">' + ic('user') + 'Личный кабинет</a>' +
+        '      </nav>' +
+        '      <div class="mg-side-salons">' +
+        brs.map(function (b) { return '<a href="tel:' + esc(b.phone_tel) + '"><b>' + esc(b.short_name) + '</b><span>' + esc(b.phone) + '</span></a>'; }).join('') +
+        '      </div>' +
+        '      <button type="button" class="mg-btn mg-btn-copper" style="width:100%" data-lead="Заказать бесплатный расчёт плитки" data-lead-type="Расчёт с сайта">Заказать расчёт</button>' +
         '    </div>' +
-        '  </div>' +
+        '  </aside>' +
         '</div>' +
-        '<nav class="mob-bar" aria-label="Мобильная навигация">' +
-        '  <a href="index.html">Главная</a>' +
-        '  <a href="catalog.html">Каталог</a>' +
-        '  <a href="designer.html">3D</a>' +
-        '  <button type="button" id="mobCartBtn">Корзина<span class="mob-cnt zero" data-cart-count></span></button>' +
-        '  <a href="contacts.html">Салоны</a>' +
+        '<nav class="mob-bar mg-tabbar" aria-label="Мобильная навигация">' +
+        '  <a href="catalog.html"' + (page === 'catalog.html' ? ' class="on"' : '') + '>' + ic('grid') + '<span>Каталог</span></a>' +
+        '  <button type="button" id="mobSearchBtn">' + ic('search') + '<span>Поиск</span></button>' +
+        '  <a href="designer.html"' + (page === 'designer.html' ? ' class="on"' : '') + '>' + ic('cube') + '<span>3D</span></a>' +
+        '  <a href="account.html#favs">' + ic('heart') + '<span>Избранное</span><i class="mob-cnt zero" data-fav-count></i></a>' +
+        '  <button type="button" id="mobCartBtn">' + ic('cart') + '<span>Корзина</span><i class="mob-cnt zero" data-cart-count></i></button>' +
         '</nav>';
       d.body.appendChild(wrap);
     }
@@ -923,6 +998,7 @@
       mt.onclick = function (e) {
         e.stopPropagation();
         mm.classList.toggle('open');
+        mt.setAttribute('aria-expanded', mm.classList.contains('open') ? 'true' : 'false');
       };
     }
     var mr = d.getElementById('moreToggle');
@@ -946,7 +1022,10 @@
     });
 
     var os = d.getElementById('openSearch');
-    if (os) os.onclick = function () { open('searchModalBg'); setTimeout(function () { d.getElementById('globalSearchInp').focus(); }, 60); };
+    var openSrch = function () { open('searchModalBg'); setTimeout(function () { d.getElementById('globalSearchInp').focus(); }, 60); };
+    if (os) os.onclick = openSrch;
+    var msb = d.getElementById('mobSearchBtn');
+    if (msb) msb.onclick = openSrch;
 
     var oc = d.getElementById('openCart');
     var mcb = d.getElementById('mobCartBtn');
@@ -1027,7 +1106,7 @@
         e.preventDefault();
         cart.add(addBtn.dataset.add, 1);
         addBtn.classList.add('in');
-        if (addBtn.classList.contains('btn-cart')) addBtn.textContent = 'В корзине ✓';
+        if (addBtn.classList.contains('btn-cart')) { var sp = addBtn.querySelector('span'); if (sp) sp.textContent = 'В корзине ✓'; else addBtn.textContent = 'В корзине ✓'; }
         return;
       }
       var dec = e.target.closest('[data-cdec]');
@@ -1058,8 +1137,8 @@
     });
 
     w.addEventListener('scroll', function () {
-      var hd = d.querySelector('.hd');
-      if (hd) hd.classList.toggle('stuck', w.scrollY > 18);
+      var hd = d.querySelector('.mgh');
+      if (hd) hd.classList.toggle('stuck', w.scrollY > 40);
     }, { passive: true });
   }
 

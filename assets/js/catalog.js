@@ -5,7 +5,7 @@
     var U = w.UN;
     if (!U) return;
     var PRODUCTS = (U.products || []).filter(function (p) { return !p.is_hidden; });
-    var PAGE_SIZE = 12;
+    var PAGE_SIZE = 24;
     var grid = d.getElementById('catGrid');
     if (!grid) return;
 
@@ -13,6 +13,7 @@
     var qInput = $('catSearch'), sortSel = $('catSort'), priceMax = $('catPriceMax'), priceVal = $('catPriceVal');
     var countEl = $('catCount'), chipsEl = $('catChips'), pagEl = $('catPag'), filtersEl = $('catFilters');
 
+    var SW = { white: '#F3F0EA', beige: '#D9C7A8', grey: '#A3A29E', brown: '#8A6146', dark: '#2C2C2C', black: '#151515', gold: 'linear-gradient(135deg,#1b1b1b,#c49a52)', color: 'linear-gradient(135deg,#C79A5B,#5E7C76)' };
     var GROUPS = ['design', 'color', 'room', 'surf', 'size', 'country', 'coll'];
     var FLAGS = { stock: 'В наличии', msk: 'Склад Москва', tver: 'Склад Тверь', new: 'Новинки', photo: 'С фото' };
 
@@ -66,8 +67,9 @@
       if (!box) return;
       if (!items.length) { box.closest('.flt-grp').style.display = 'none'; return; }
       box.innerHTML = items.map(function (it) {
+        var sw = group === 'color' && SW[it.key] ? '<i class="mg-sw" style="background:' + SW[it.key] + '"></i>' : '';
         return '<label class="flt-opt"><span><input type="checkbox" data-flt="' + group + '" value="' + U.esc(it.key) + '"' +
-          (state[group].indexOf(it.key) >= 0 ? ' checked' : '') + '> ' + U.esc(it.label) + '</span><small class="muted" data-cnt="' + group + ':' + U.esc(it.key) + '">' + it.count + '</small></label>';
+          (state[group].indexOf(it.key) >= 0 ? ' checked' : '') + '> ' + sw + U.esc(it.label) + '</span><small class="muted" data-cnt="' + group + ':' + U.esc(it.key) + '">' + it.count + '</small></label>';
       }).join('');
     }
     function byCount(map, labelFn) {
@@ -168,22 +170,75 @@
       return v;
     }
 
+    var grid3 = U.store.get('dens', '4');
+    function setDens(v) {
+      grid3 = v; U.store.set('dens', v);
+      grid.classList.toggle('dens-3', v === '3');
+      d.querySelectorAll('[data-dens]').forEach(function (b) { b.classList.toggle('on', b.dataset.dens === v); });
+    }
+    setDens(grid3);
+    d.querySelectorAll('[data-dens]').forEach(function (b) { b.onclick = function () { setDens(b.dataset.dens); }; });
+
+    var pillsEl = $('catPills');
+    var PILLS = [{ g: '', v: '', t: 'Все' }];
+    Object.keys(sizeMap).sort(function (a, b) { return sizeMap[b] - sizeMap[a]; }).forEach(function (k) { PILLS.push({ g: 'size', v: k, t: k.replace('x', '×') }); });
+    ['marble', 'stone', 'concrete', 'wood', 'plain'].forEach(function (k) { if (PRODUCTS.some(function (p) { return p.design === k; })) PILLS.push({ g: 'design', v: k, t: U.label('designs', k) }); });
+    PILLS.push({ g: 'flag', v: 'new', t: 'Новинки' });
+    function renderPills() {
+      if (!pillsEl) return;
+      var none = !state.size.length && !state.design.length && !state.flags.length;
+      pillsEl.innerHTML = PILLS.map(function (x) {
+        var on = !x.g ? none : (x.g === 'flag' ? state.flags.indexOf(x.v) >= 0 : state[x.g].indexOf(x.v) >= 0);
+        return '<button type="button" class="mg-pill' + (on ? ' on' : '') + '" data-pg2="' + x.g + '" data-pv="' + U.esc(x.v) + '">' + U.esc(x.t) + '</button>';
+      }).join('');
+    }
+    if (pillsEl) pillsEl.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-pg2]'); if (!b) return;
+      var g = b.dataset.pg2, v = b.dataset.pv;
+      if (!g) { state.size = []; state.design = []; state.flags = []; }
+      else if (g === 'flag') { var i = state.flags.indexOf(v); if (i >= 0) state.flags.splice(i, 1); else state.flags.push(v); }
+      else state[g] = state[g].length === 1 && state[g][0] === v ? [] : [v];
+      d.querySelectorAll('[data-flt="size"],[data-flt="design"]').forEach(function (el) { el.checked = state[el.dataset.flt].indexOf(el.value) >= 0; });
+      d.querySelectorAll('[data-flag]').forEach(function (cb) { cb.checked = state.flags.indexOf(cb.dataset.flag) >= 0; });
+      state.page = 1; apply();
+    });
+
+    var h1 = $('catH1');
+    function updateH1() {
+      if (!h1) return;
+      var parts = [];
+      if (state.design.length === 1) parts.push(U.label('designs', state.design[0]).toLowerCase());
+      if (state.size.length === 1) parts.push(state.size[0].replace('x', '×'));
+      if (state.color.length === 1) parts.push(U.label('colors', state.color[0]).toLowerCase());
+      var t = 'Керамогранит' + (parts.length ? ' ' + parts.join(', ') : '');
+      if (!parts.length && !state.flags.length && !state.q) t = 'Каталог керамогранита';
+      h1.textContent = t;
+    }
+
     function apply() {
       var list = sortList(PRODUCTS.filter(function (p) { return matches(p); }));
       var total = list.length;
       var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-      if (state.page > pages) state.page = 1;
-      var slice = list.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
+      if (state.page > pages) state.page = pages;
+      var shown = Math.min(total, state.page * PAGE_SIZE);
+      var slice = list.slice(0, shown);
       var word = U.plural(total, 'позиция', 'позиции', 'позиций');
-      if (countEl) countEl.textContent = 'Найдено ' + total + ' ' + word;
+      if (countEl) countEl.textContent = total ? 'Показано ' + shown + ' из ' + total : 'Ничего не найдено';
       var ac = $('catApplyCnt'); if (ac) ac.textContent = total + ' ' + word;
 
       grid.innerHTML = slice.length
         ? slice.map(U.card).join('')
-        : '<div class="panel-card cat-empty" style="grid-column:1/-1;text-align:center"><h3>По выбранным фильтрам ничего не найдено</h3><p class="muted">Сбросьте часть параметров или напишите нам — подберём аналог со склада.</p><button type="button" class="btn btn-gold" id="emptyReset">Сбросить фильтры</button></div>';
+        : '<div class="mg-empty"><h3>По выбранным фильтрам ничего не найдено</h3><p class="muted">Сбросьте часть параметров или напишите нам — подберём аналог со склада.</p><button type="button" class="mg-btn mg-btn-copper" id="emptyReset">Сбросить фильтры</button></div>';
       var er = $('emptyReset'); if (er) er.onclick = resetAll;
       grid.classList.remove('swap'); void grid.offsetWidth; grid.classList.add('swap');
+      var more = $('catMore');
+      if (more) {
+        var left = total - shown;
+        more.hidden = left <= 0;
+        more.textContent = 'Показать ещё ' + Math.min(PAGE_SIZE, left) + ' из ' + left;
+      }
 
+      var nAct = 0;
       if (chipsEl) {
         var ch = [];
         if (state.q) ch.push('<button type="button" class="chip" data-clr="q">Поиск: ' + U.esc(state.q) + ' ✕</button>');
@@ -191,15 +246,16 @@
         GROUPS.forEach(function (g) {
           state[g].forEach(function (v) { ch.push('<button type="button" class="chip" data-clr="' + g + ':' + U.esc(v) + '">' + U.esc(labelFor(g, v)) + ' ✕</button>'); });
         });
+        nAct = ch.length;
+        if (ch.length > 1) ch.push('<button type="button" class="chip chip-clear" id="chipsReset">Сбросить всё</button>');
         chipsEl.innerHTML = ch.join('');
         chipsEl.style.display = ch.length ? '' : 'none';
+        var cr = $('chipsReset'); if (cr) cr.onclick = resetAll;
       }
-
-      if (pagEl) {
-        var h = '';
-        if (pages > 1) for (var i = 1; i <= pages; i++) h += '<button type="button" data-pg="' + i + '"' + (i === state.page ? ' class="on" aria-current="page"' : '') + '>' + i + '</button>';
-        pagEl.innerHTML = h;
-      }
+      var fn = $('catFltN'); if (fn) { fn.textContent = nAct ? String(nAct) : ''; fn.classList.toggle('on', nAct > 0); }
+      if (pagEl) pagEl.innerHTML = '';
+      renderPills();
+      updateH1();
       updateCounts();
       syncUrl();
     }
@@ -237,7 +293,14 @@
     // мобильные фильтры — выезжающая панель
     var tg = $('catFltToggle');
     function closeF() { filtersEl.classList.remove('open'); d.body.classList.remove('flt-lock'); }
-    if (tg) tg.onclick = function () { filtersEl.classList.add('open'); d.body.classList.add('flt-lock'); };
+    var isMob = function () { return w.matchMedia('(max-width: 1100px)').matches; };
+    if (tg) tg.onclick = function () {
+      if (isMob()) { filtersEl.classList.add('open'); d.body.classList.add('flt-lock'); }
+      else { d.body.classList.toggle('flt-hidden'); U.store.set('flt_hidden', d.body.classList.contains('flt-hidden')); }
+    };
+    if (U.store.get('flt_hidden', false)) d.body.classList.add('flt-hidden');
+    if ($('catFltClose')) $('catFltClose').onclick = closeF;
+    if ($('catMore')) $('catMore').onclick = function () { state.page++; apply(); };
     if ($('catApplyMob')) $('catApplyMob').onclick = function () { closeF(); w.scrollTo({ top: grid.getBoundingClientRect().top + w.scrollY - 120, behavior: 'smooth' }); };
     d.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeF(); });
     d.addEventListener('click', function (e) { if (d.body.classList.contains('flt-lock') && !e.target.closest('#catFilters') && !e.target.closest('#catFltToggle')) closeF(); });
@@ -253,12 +316,6 @@
         else { state[g] = state[g].filter(function (x) { return x !== v; }); d.querySelectorAll('[data-flt="' + g + '"]').forEach(function (el) { if (el.value === v) el.checked = false; }); }
       }
       state.page = 1; apply();
-    });
-    if (pagEl) pagEl.addEventListener('click', function (e) {
-      var b = e.target.closest('[data-pg]');
-      if (!b) return;
-      state.page = Number(b.dataset.pg); apply();
-      w.scrollTo({ top: grid.getBoundingClientRect().top + w.scrollY - 140, behavior: 'smooth' });
     });
 
     apply();

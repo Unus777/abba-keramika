@@ -5,69 +5,116 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Абба Керамика — керамогранит в Мытищах, Москве и Твери</title>
   <meta name="description" content="Керамогранит 60×60 и 60×120 в наличии на складах в Москве и Твери: мрамор, оникс, травертин, бетон и дерево. Шоу-румы Абба Керамика в Мытищах, Москве и Твери.">
-  <meta name="theme-color" content="#FAF6F0">
+  <meta name="theme-color" content="#F4F1EC">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="preload" as="image" href="uploads/tiles/catalog/VHP612441/01.jpg" fetchpriority="high">
-  <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/mg.css">
   <script defer src="data.js"></script>
   <script defer src="assets/js/app.js"></script>
   <script defer src="assets/js/home.js"></script>
   <script defer src="assets/js/assistant.js"></script>
 </head>
-<body class="home">
+<body class="home mg">
   <header id="siteHeader" class="hd"></header>
   <main>
     <!-- HERO -->
-    <section class="hero2" id="hero">
-      <div class="wrap hero2-grid">
-        <div class="hero2-copy">
-          <div class="hero2-eyebrow" data-anim style="--i:0"><span class="hero2-dot"></span><span id="heroEyebrow">Шоу-румы и склады · Мытищи · Москва · Тверь</span></div>
-          <h1 class="hero2-title" id="heroTitle">Керамогранит, который <em>создаёт интерьер</em></h1>
-          <p class="hero2-sub" id="heroSub" data-anim style="--i:3">Мрамор, оникс, травертин, бетон и дерево в форматах 60×60 и 60×120. Остатки на складах в Москве и Твери, подбор и расчёт в шоу-руме.</p>
-          <div class="hero2-cta" data-anim style="--i:4">
-            <a href="catalog.html" class="btn btn-gold btn-lg" id="heroCtaPrimary">Смотреть каталог</a>
-            <button type="button" class="btn btn-ghost btn-lg" id="heroCtaSecondary" data-lead="Подобрать плитку с менеджером">Подобрать плитку</button>
+    <section class="mg-hero-sec" id="hero">
+      <div class="wrap">
+        <div class="mg-hero" id="heroStage" aria-roledescription="carousel" aria-label="Коллекции Абба Керамика">
+          <div class="mg-hero-copy">
+            <span class="mg-hero-eyebrow" id="heroEyebrow">Шоу-румы и склады · Мытищи · Москва · Тверь</span>
+            <h1 class="mg-hero-title" id="heroTitle">Керамогранит, который <em>создаёт интерьер</em></h1>
+            <p class="mg-hero-sub" id="heroSub">Мрамор, оникс, травертин, бетон и дерево в форматах 60×60 и 60×120. Остатки на складах в Москве и Твери, подбор и расчёт в шоу-руме.</p>
+            <div class="mg-hero-cta">
+              <a href="catalog.html" class="mg-btn mg-btn-light" id="heroCtaPrimary">Смотреть каталог</a>
+              <button type="button" class="mg-btn mg-btn-glass" id="heroCtaSecondary" data-lead="Подобрать плитку с менеджером">Подобрать плитку</button>
+            </div>
+            <div class="mg-hero-ctrl">
+              <button type="button" class="mg-hero-nav" id="heroPrev" aria-label="Предыдущий слайд">‹</button>
+              <div class="mg-hero-dots" id="stageThumbs" role="tablist"></div>
+              <button type="button" class="mg-hero-nav" id="heroNext" aria-label="Следующий слайд">›</button>
+            </div>
           </div>
-          <dl class="hero2-stats" data-anim style="--i:5">
-            <div><dt id="statSku">90</dt><dd>позиций в каталоге</dd></div>
-            <div><dt id="statStock">—</dt><dd>м² на складах сейчас</dd></div>
-            <div><dt>3</dt><dd>шоу-рума: Мытищи, Москва, Тверь</dd></div>
-          </dl>
+          <div class="mg-hero-view" id="heroView">
+            <div class="mg-hero-track" id="stageSlides"></div>
+          </div>
         </div>
+        <dl class="mg-stats">
+          <div><dt id="statSku">90</dt><dd>позиций в каталоге</dd></div>
+          <div><dt id="statStock">—</dt><dd>м² на складах сейчас</dd></div>
+          <div><dt>3</dt><dd>шоу-рума с живыми образцами</dd></div>
+          <div><dt>2</dt><dd>склада: Москва и Тверь</dd></div>
+        </dl>
+      </div>
+    </section>
 
-        <div class="hero2-stage" id="heroStage" data-anim style="--i:2" aria-roledescription="carousel" aria-label="Коллекции Абба Керамика">
-          <div class="stage-frame" id="stageFrame">
-            <div class="stage-slides" id="stageSlides"></div>
-            <div class="stage-shade"></div>
-            <a class="stage-caption" id="stageCaption" href="catalog.html">
-              <span class="stage-kicker" id="stageKicker">Коллекция сезона</span>
-              <b class="stage-name" id="stageName">Абба Керамика</b>
-              <span class="stage-meta" id="stageMeta"></span>
-              <span class="stage-go" aria-hidden="true">→</span>
-            </a>
-            <div class="stage-progress"><i id="stageProgress"></i></div>
-          </div>
-          <div class="stage-chip" id="stageChip">
-            <img id="stageChipImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="">
-            <div><small>Плитка на фото</small><b id="stageChipName"></b></div>
-          </div>
-          <div class="stage-thumbs" id="stageThumbs" role="tablist"></div>
+    <!-- CATEGORIES -->
+    <section class="sec mg-cats">
+      <div class="wrap">
+        <div class="mg-sh rv">
+          <h2>Популярные категории</h2>
+          <p>Выберите формат или фактуру — сразу покажем позиции с остатками на складах</p>
         </div>
+        <div class="mg-cat-grid rv" id="homeCats"></div>
+        <div class="mg-center rv"><a href="catalog.html" class="mg-ulink">Все категории</a></div>
+      </div>
+    </section>
+
+    <!-- PRODUCT GRID -->
+    <section class="sec mg-trend">
+      <div class="wrap">
+        <div class="mg-sh rv">
+          <h2>Сейчас в наличии</h2>
+          <p>Актуальные позиции со складов в Москве и Твери. Цены уточняйте у менеджера — пришлём расчёт под ваш объём</p>
+        </div>
+        <div class="mg-tabs rv" id="homeTabs">
+          <button type="button" class="tab on" data-tab="stock">В наличии</button>
+          <button type="button" class="tab" data-tab="new">Новинки</button>
+          <button type="button" class="tab" data-tab="marble">Мрамор и оникс</button>
+          <button type="button" class="tab" data-tab="concrete">Бетон и камень</button>
+          <button type="button" class="tab" data-tab="large">60×120</button>
+        </div>
+        <div class="mg-grid rv" id="homeRail"></div>
+        <div class="mg-center rv"><a href="catalog.html" class="mg-btn mg-btn-dark">Смотреть весь каталог</a></div>
+      </div>
+    </section>
+
+    <!-- SHOP THE LOOK -->
+    <section class="sec mg-look-sec" id="lookSec">
+      <div class="wrap mg-look">
+        <div class="mg-look-img" id="lookImg"></div>
+        <div class="mg-look-side">
+          <h2>Плитка<br>в интерьере</h2>
+          <p class="muted">Нажмите на точку на фото — покажем плитку из каталога</p>
+          <div id="lookCard"></div>
+          <div class="mg-look-dots" id="lookDots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLLECTIONS -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="mg-sh mg-sh-row rv">
+          <div>
+            <h2>Коллекции по фактуре</h2>
+            <p>Каждая плитка — с фотографиями в интерьере, остатками по складам и расчётом упаковок</p>
+          </div>
+          <a href="catalog.html" class="mg-ulink">Весь каталог</a>
+        </div>
+        <div class="coll-grid mg-coll rv" id="homeCollections"></div>
       </div>
     </section>
 
     <!-- QUICK PICK -->
     <section class="sec sec-tight">
       <div class="wrap">
-        <div class="quiz-box rv">
-          <div class="quiz-hd">
-            <div>
-              <h2>Подбор плитки за 20 секунд</h2>
-              <p class="muted">Выберите помещение, фактуру и формат — покажем подходящие позиции со складов.</p>
-            </div>
-            <a href="calc.html" class="tag tag-gold">Калькулятор упаковок, клея и затирки →</a>
+        <div class="mg-quiz rv">
+          <div class="mg-quiz-hd">
+            <h2>Подбор плитки за 20 секунд</h2>
+            <p class="muted">Выберите помещение, фактуру и формат — покажем подходящие позиции со складов. <a href="calc.html" class="mg-ulink">Калькулятор упаковок, клея и затирки</a></p>
           </div>
-          <form id="homeQuiz" class="quiz-row">
+          <form id="homeQuiz" class="mg-quiz-row">
             <div class="field">
               <label for="qRoom">Помещение</label>
               <select class="inp" id="qRoom">
@@ -97,59 +144,8 @@
                 <option value="60x120">60×120 см</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-gold">Показать плитку</button>
+            <button type="submit" class="mg-btn mg-btn-copper">Показать плитку</button>
           </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- COLLECTIONS -->
-    <section class="sec">
-      <div class="wrap">
-        <div class="sec-hd rv">
-          <div>
-            <h2>Коллекции по фактуре</h2>
-            <p>Каждая плитка — с фотографиями в интерьере, остатками по складам и расчётом упаковок.</p>
-          </div>
-          <a href="catalog.html" class="btn btn-ghost btn-sm">Весь каталог →</a>
-        </div>
-        <div class="coll-grid rv" id="homeCollections"></div>
-      </div>
-    </section>
-
-    <!-- PRODUCT RAIL -->
-    <section class="sec">
-      <div class="wrap">
-        <div class="sec-hd rv">
-          <div>
-            <h2>Витрина Абба Керамика</h2>
-            <p>Актуальные позиции со складов в Москве и Твери. Цены уточняйте у менеджера — пришлём расчёт под ваш объём.</p>
-          </div>
-          <div class="tabs" id="homeTabs">
-            <button type="button" class="tab on" data-tab="stock">В наличии</button>
-            <button type="button" class="tab" data-tab="new">Новинки</button>
-            <button type="button" class="tab" data-tab="marble">Мрамор и оникс</button>
-            <button type="button" class="tab" data-tab="concrete">Бетон и камень</button>
-            <button type="button" class="tab" data-tab="large">60×120</button>
-          </div>
-        </div>
-        <div class="rail rv" id="homeRail"></div>
-      </div>
-    </section>
-
-    <!-- WHY US -->
-    <section class="sec">
-      <div class="wrap">
-        <div class="why-grid rv">
-          <div class="why-intro">
-            <h2>Почему выбирают <em>Абба Керамика</em></h2>
-            <p class="muted">Покупка плитки — это не только красивый рисунок. Мы помогаем пройти весь путь: от выбора до доставки на объект.</p>
-            <button type="button" class="btn btn-portoro" data-lead="Консультация по подбору плитки">Получить консультацию</button>
-          </div>
-          <div class="why-item"><span class="why-n">01</span><h3>Живые образцы</h3><p>Плитку можно увидеть и потрогать в шоу-румах в Мытищах, Москве и Твери.</p></div>
-          <div class="why-item"><span class="why-n">02</span><h3>Склады в Москве и Твери</h3><p>Остатки на сайте показываются по каждому складу — без сюрпризов после оплаты.</p></div>
-          <div class="why-item"><span class="why-n">03</span><h3>Точный расчёт</h3><p>Посчитаем упаковки с запасом на подрезку, клей, затирку и систему выравнивания.</p></div>
-          <div class="why-item"><span class="why-n">04</span><h3>Доставка и подъём</h3><p>Привезём по Москве, области и Твери, поднимем на этаж. Самовывоз со склада.</p></div>
         </div>
       </div>
     </section>
@@ -157,21 +153,21 @@
     <!-- SHOWROOMS & WAREHOUSES -->
     <section class="sec">
       <div class="wrap">
-        <div class="sec-hd rv">
+        <div class="mg-sh mg-sh-row rv">
           <div>
             <h2>Шоу-румы и склады</h2>
-            <p>Мытищи (ТСК «Яуза»), Москва (ТЦ «Люблинское поле»), Тверь (ул. Коминтерна, 44 и склад в пос. Новая Константиновка).</p>
+            <p>Мытищи (ТСК «Яуза»), Москва (ТЦ «Люблинское поле»), Тверь (ул. Коминтерна, 44 и склад в пос. Новая Константиновка)</p>
           </div>
-          <a href="contacts.html" class="btn btn-ghost btn-sm">Все контакты →</a>
+          <a href="contacts.html" class="mg-ulink">Все контакты</a>
         </div>
-        <div class="branches-grid rv" id="homeBranchesGrid"></div>
+        <div class="branches-grid mg-branches rv" id="homeBranchesGrid"></div>
       </div>
     </section>
 
     <!-- REVIEWS (показывается, когда есть опубликованные отзывы) -->
     <section class="sec" id="homeReviewsSec">
       <div class="wrap">
-        <div class="sec-hd rv">
+        <div class="mg-sh mg-sh-row rv">
           <div>
             <h2>Отзывы покупателей</h2>
             <p>Отзывы публикуются после проверки. Поделитесь впечатлением о покупке — это помогает другим.</p>

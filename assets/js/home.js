@@ -60,135 +60,122 @@
     if (sSku) sSku.textContent = count;
     var sStock = d.getElementById('statStock');
     if (sStock) sStock.textContent = totalM2 > 0 ? U.num(Math.round(totalM2 / 10) * 10) : '—';
-    splitWords(t);
 
-    /* ---------- 2. Витрина коллекций (crossfade + ken burns) ---------- */
+    /* ---------- 2. Лента интерьеров (плавный сдвиг, без прелоадера) ---------- */
+    // Предпочитаем фото в интерьере: у карточек первые 1–3 фото — обычно постер с инфографикой
+    function interior(p, pref) {
+      var im = p.imgs || [];
+      if (pref && im.indexOf(pref) >= 3) return pref;
+      if (im.length >= 5) return im[3];
+      return pref || im[im.length - 1] || '';
+    }
     var showcase = (cfg.showcase || []).map(function (s) {
       var p = U.byId(s.id);
-      return p ? { p: p, img: s.img, kicker: s.kicker } : null;
+      return p && p.imgs && p.imgs.length >= 5 ? { p: p, img: interior(p, s.img), kicker: s.kicker } : null;
     }).filter(Boolean);
-    if (!showcase.length) {
-      showcase = PRODUCTS.filter(function (p) { return p.imgs && p.imgs.length > 2; }).slice(0, 5).map(function (p) {
-        return { p: p, img: p.imgs[Math.min(p.imgs.length - 1, 4)], kicker: p.color || p.surf };
-      });
-    }
+    PRODUCTS.filter(function (p) { return !p.is_hidden && p.imgs && p.imgs.length >= 6 && !showcase.some(function (s) { return s.p.id === p.id; }); })
+      .sort(function (a, b) { return Number(b.stock_qty || 0) - Number(a.stock_qty || 0); })
+      .slice(0, Math.max(0, 7 - showcase.length))
+      .forEach(function (p) { showcase.push({ p: p, img: interior(p), kicker: U.label('designs', p.design) }); });
 
-    var slidesEl = d.getElementById('stageSlides');
-    var thumbsEl = d.getElementById('stageThumbs');
-    var frame = d.getElementById('stageFrame');
-    var cur = -1, timer = null, startedAt = 0, paused = false;
-
-    if (slidesEl && showcase.length) {
-      slidesEl.innerHTML = showcase.map(function (s, i) {
-        return '<figure class="stage-slide" data-i="' + i + '"><img src="' + U.esc(i === 0 ? s.img : '') + '" data-src="' + U.esc(s.img) + '" alt="' + U.esc(s.p.name + ' в интерьере') + '"' + (i === 0 ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async"></figure>';
+    var track = d.getElementById('stageSlides');
+    var dotsEl = d.getElementById('stageThumbs');
+    var stage = d.getElementById('heroStage');
+    var view = d.getElementById('heroView');
+    var cur = 0, timer = null, paused = false;
+    if (track && showcase.length) {
+      track.innerHTML = showcase.map(function (s, i) {
+        return '<a class="mg-slide" href="' + U.url(s.p) + '" data-i="' + i + '">' +
+          '<img src="' + U.esc(s.img) + '" alt="' + U.esc(s.p.name + ' в интерьере') + '"' + (i < 2 ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async">' +
+          '<span class="mg-slide-cap"><small>' + U.esc(s.kicker || U.label('designs', s.p.design)) + '</small><b>' + U.esc(s.p.name) + '</b><em>' + U.esc([U.size(s.p), s.p.surf].filter(Boolean).join(' · ')) + '</em><i>→</i></span></a>';
       }).join('');
-      thumbsEl.innerHTML = showcase.map(function (s, i) {
-        return '<button type="button" class="stage-thumb" role="tab" data-i="' + i + '" aria-label="' + U.esc(s.p.name) + '"><img src="' + U.esc(U.thumb(s.img)) + '" alt="" loading="lazy"><span>' + U.esc(s.p.name) + '</span></button>';
-      }).join('');
-
-      var slides = slidesEl.querySelectorAll('.stage-slide');
-      var thumbs = thumbsEl.querySelectorAll('.stage-thumb');
-      var cap = d.getElementById('stageCaption');
-      var prog = d.getElementById('stageProgress');
-      var chipImg = d.getElementById('stageChipImg');
-      var chip = d.getElementById('stageChip');
-
-      var go = function (i) {
-        if (i === cur) return;
-        var s = showcase[i];
-        var im = slides[i].querySelector('img');
-        if (!im.getAttribute('src')) im.src = im.dataset.src;
-        // предзагрузка следующего слайда
-        var nx = slides[(i + 1) % slides.length].querySelector('img');
-        if (nx && !nx.getAttribute('src')) nx.src = nx.dataset.src;
-        slides.forEach(function (el, k) {
-          el.classList.toggle('on', k === i);
-          el.classList.toggle('was', k === cur);
-        });
-        thumbs.forEach(function (el, k) { el.classList.toggle('on', k === i); el.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
-        cap.classList.remove('show');
-        chip.classList.remove('show');
-        setTimeout(function () {
-          d.getElementById('stageKicker').textContent = s.kicker || 'Коллекция';
-          d.getElementById('stageName').textContent = s.p.name;
-          d.getElementById('stageMeta').textContent = [U.size(s.p), s.p.surf, U.hasPrice(s.p) ? U.rub(s.p.price) + '/м²' : ''].filter(Boolean).join(' · ');
-          d.getElementById('stageChipName').textContent = s.p.name + ' · ' + U.size(s.p);
-          cap.href = U.url(s.p);
-          chipImg.src = U.thumb(U.img(s.p));
-          cap.classList.add('show');
-          chip.classList.add('show');
-        }, cur === -1 ? 0 : 260);
-        cur = i;
-        startedAt = Date.now();
-        if (prog) {
-          prog.style.transition = 'none';
-          prog.style.transform = 'scaleX(0)';
-          if (!REDUCED) {
-            void prog.offsetWidth;
-            prog.style.transition = 'transform ' + SLIDE_MS + 'ms linear';
-            prog.style.transform = 'scaleX(1)';
-          }
-        }
+      var slides = track.querySelectorAll('.mg-slide');
+      var visible = function () { var sw = slides[0].getBoundingClientRect().width || 1; return Math.max(1, Math.round(view.clientWidth / sw)); };
+      var maxStart = function () { return Math.max(0, slides.length - visible()); };
+      var buildDots = function () {
+        var n = maxStart() + 1;
+        dotsEl.innerHTML = n > 1 ? Array.from({ length: n }, function (_, i) { return '<button type="button" role="tab" data-i="' + i + '" aria-label="Слайд ' + (i + 1) + '"></button>'; }).join('') : '';
       };
-
+      var go = function (i) {
+        var m = maxStart();
+        cur = i > m ? 0 : (i < 0 ? m : i);
+        track.style.transform = 'translate3d(' + (-slides[cur].offsetLeft) + 'px,0,0)';
+        dotsEl.querySelectorAll('button').forEach(function (el, k) { el.classList.toggle('on', k === cur); el.setAttribute('aria-selected', k === cur ? 'true' : 'false'); });
+      };
       var schedule = function () {
         clearTimeout(timer);
-        if (REDUCED || paused || showcase.length < 2) return;
-        timer = setTimeout(function () { go((cur + 1) % showcase.length); schedule(); }, SLIDE_MS);
+        if (REDUCED || paused || maxStart() < 1) return;
+        timer = setTimeout(function () { go(cur + 1); schedule(); }, SLIDE_MS);
       };
-
-      thumbsEl.addEventListener('click', function (e) {
-        var b = e.target.closest('[data-i]');
-        if (!b) return;
-        go(Number(b.dataset.i));
-        schedule();
-      });
-
-      // пауза при наведении и когда вкладка скрыта
-      var stage = d.getElementById('heroStage');
-      stage.addEventListener('mouseenter', function () { paused = true; clearTimeout(timer); if (prog) { var cs = getComputedStyle(prog).transform; prog.style.transition = 'none'; prog.style.transform = cs; } });
-      stage.addEventListener('mouseleave', function () { paused = false; go((cur + 1) % showcase.length); schedule(); });
+      buildDots();
+      dotsEl.addEventListener('click', function (e) { var b = e.target.closest('[data-i]'); if (b) { go(Number(b.dataset.i)); schedule(); } });
+      d.getElementById('heroPrev').onclick = function () { go(cur - 1); schedule(); };
+      d.getElementById('heroNext').onclick = function () { go(cur + 1); schedule(); };
+      view.addEventListener('mouseenter', function () { paused = true; clearTimeout(timer); });
+      view.addEventListener('mouseleave', function () { paused = false; schedule(); });
       d.addEventListener('visibilitychange', function () { if (d.hidden) clearTimeout(timer); else schedule(); });
-
-      // свайп на телефоне
-      var sx = null;
-      frame.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
-      frame.addEventListener('touchend', function (e) {
+      var rt; w.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { buildDots(); go(Math.min(cur, maxStart())); }, 150); });
+      var sx = null, sy = null;
+      view.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+      view.addEventListener('touchend', function (e) {
         if (sx == null) return;
-        var dx = e.changedTouches[0].clientX - sx;
-        if (Math.abs(dx) > 40) { go((cur + (dx < 0 ? 1 : showcase.length - 1)) % showcase.length); schedule(); }
+        var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { go(cur + (dx < 0 ? 1 : -1)); schedule(); }
         sx = null;
       });
-
-      // мягкий параллакс за курсором (только мышь)
-      if (!REDUCED && w.matchMedia('(pointer: fine)').matches) {
-        var raf = 0, tx = 0, ty = 0;
-        stage.addEventListener('mousemove', function (e) {
-          var r = frame.getBoundingClientRect();
-          tx = ((e.clientX - r.left) / r.width - 0.5);
-          ty = ((e.clientY - r.top) / r.height - 0.5);
-          if (!raf) raf = requestAnimationFrame(function () {
-            raf = 0;
-            frame.style.setProperty('--px', (tx * -14).toFixed(2) + 'px');
-            frame.style.setProperty('--py', (ty * -10).toFixed(2) + 'px');
-            chip.style.setProperty('--px', (tx * 10).toFixed(2) + 'px');
-            chip.style.setProperty('--py', (ty * 8).toFixed(2) + 'px');
-          });
-        });
-        stage.addEventListener('mouseleave', function () {
-          frame.style.setProperty('--px', '0px'); frame.style.setProperty('--py', '0px');
-          chip.style.setProperty('--px', '0px'); chip.style.setProperty('--py', '0px');
-        });
-      }
-
       go(0);
       schedule();
     }
+    if (heroEl) requestAnimationFrame(function () { heroEl.classList.add('is-in'); });
 
-    // Запуск анимации первого экрана: сразу после построения DOM, без прелоадера
-    if (heroEl) {
-      requestAnimationFrame(function () { heroEl.classList.add('is-in'); });
+    function interiorOf(src) {
+      var p = PRODUCTS.filter(function (x) { return x.imgs && x.imgs.indexOf(src) >= 0; })[0];
+      return p && p.imgs.indexOf(src) < 3 && p.imgs.length >= 5 ? p.imgs[3] : src;
     }
+
+    /* ---------- 2b. Популярные категории (овалы) ---------- */
+    var catsEl = d.getElementById('homeCats');
+    if (catsEl) {
+      var texOf = function (list) {
+        var p = list.filter(function (x) { return x.fitting_img; })[0] || list.filter(function (x) { return x.imgs && x.imgs.length; })[0];
+        return p ? (p.fitting_img || U.thumb(p.imgs[0])) : '';
+      };
+      var cats = [];
+      var sizeMap = {};
+      PRODUCTS.forEach(function (p) { if (p.w && p.h) (sizeMap[p.w + 'x' + p.h] = sizeMap[p.w + 'x' + p.h] || []).push(p); });
+      Object.keys(sizeMap).sort(function (a, b) { return sizeMap[b].length - sizeMap[a].length; }).forEach(function (k) {
+        var pref = sizeMap[k].filter(function (p) { return p.design === (k === '60x60' ? 'stone' : 'marble'); });
+        cats.push({ href: 'catalog.html?size=' + k, title: k.replace('x', '×'), big: true, n: sizeMap[k].length, img: texOf(pref.length ? pref : sizeMap[k]) });
+      });
+      ['marble', 'stone', 'concrete', 'wood'].forEach(function (k) {
+        var list = PRODUCTS.filter(function (p) { return p.design === k; });
+        if (list.length) cats.push({ href: 'catalog.html?design=' + k, title: U.label('designs', k), n: list.length, img: texOf(list) });
+      });
+      catsEl.innerHTML = cats.map(function (c) {
+        return '<a class="mg-cat' + (c.big ? ' is-size' : '') + '" href="' + U.esc(c.href) + '">' +
+          '<span class="mg-cat-oval">' + (c.img ? '<img src="' + U.esc(c.img) + '" alt="" loading="lazy" decoding="async">' : '') + '</span>' +
+          '<span class="mg-cat-txt"><b>' + U.esc(c.title) + '</b><small>' + c.n + ' ' + U.plural(c.n, 'позиция', 'позиции', 'позиций') + '</small></span></a>';
+      }).join('');
+    }
+
+    /* ---------- 2c. Плитка в интерьере (точки на фото) ---------- */
+    var lookImg = d.getElementById('lookImg'), lookCard = d.getElementById('lookCard'), lookDots = d.getElementById('lookDots');
+    var looks = showcase.slice(0, 5);
+    if (lookImg && looks.length) {
+      var SPOTS = [[58, 66], [42, 72], [64, 58], [50, 70], [36, 64]];
+      var li = 0;
+      var showLook = function (i) {
+        li = (i + looks.length) % looks.length;
+        var L = looks[li], sp = SPOTS[li % SPOTS.length];
+        lookImg.innerHTML = '<img src="' + U.esc(L.img) + '" alt="' + U.esc(L.p.name + ' в интерьере') + '" loading="lazy" decoding="async">' +
+          '<button type="button" class="mg-spot" style="left:' + sp[0] + '%;top:' + sp[1] + '%" aria-label="Показать плитку ' + U.esc(L.p.name) + '"><i></i></button>';
+        lookCard.innerHTML = U.card(L.p);
+        lookDots.innerHTML = looks.map(function (x, k) { return '<button type="button" data-l="' + k + '"' + (k === li ? ' class="on"' : '') + ' aria-label="Интерьер ' + (k + 1) + '"></button>'; }).join('');
+      };
+      lookDots.addEventListener('click', function (e) { var b = e.target.closest('[data-l]'); if (b) showLook(Number(b.dataset.l)); });
+      lookImg.addEventListener('click', function (e) { if (e.target.closest('.mg-spot')) { var c = lookCard.querySelector('.pc'); if (c) { c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse'); } } });
+      showLook(0);
+    } else if (d.getElementById('lookSec')) d.getElementById('lookSec').style.display = 'none';
 
     /* ---------- 3. Подбор плитки ---------- */
     var qForm = d.getElementById('homeQuiz');
@@ -218,7 +205,7 @@
         }).length;
         return (
           '<a href="' + U.esc(c.href) + '" class="coll-card' + (i === 0 ? ' big' : '') + '">' +
-          '  <img src="' + U.esc(U.thumb(c.img)) + '" alt="' + U.esc(c.title) + '" loading="lazy" decoding="async">' +
+          '  <img src="' + U.esc(U.thumb(interiorOf(c.img))) + '" alt="' + U.esc(c.title) + '" loading="lazy" decoding="async">' +
           '  <div class="coll-body">' +
           '    <span class="coll-count">' + n + ' ' + U.plural(n, 'позиция', 'позиции', 'позиций') + '</span>' +
           '    <h3>' + U.esc(c.title) + '</h3>' +

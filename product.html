@@ -7,79 +7,123 @@
   <meta name="description" content="Керамогранит Абба Керамика: фото, характеристики, наличие на складах в Москве и Твери.">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/mg.css">
   <script defer src="data.js"></script>
   <script defer src="assets/js/app.js"></script>
   <script defer src="assets/js/product.js"></script>
   <script defer src="assets/js/assistant.js"></script>
 </head>
-<body>
+<body class="mg">
   <header id="siteHeader" class="hd"></header>
-  <main class="sec" style="padding-top:22px">
+  <main class="mg-prod-page">
     <div class="wrap" id="prodRoot">
-      <nav id="prodBread" class="muted prod-bread" aria-label="Хлебные крошки"></nav>
+      <nav id="prodBread" class="mg-bread prod-bread" aria-label="Хлебные крошки"></nav>
 
-      <div class="prod-grid">
-        <div class="prod-gal">
-          <div class="gal-main" id="galMain">
+      <div class="mg-prod">
+        <div class="mg-gal">
+          <div class="mg-gal-thumbs gal-thumbs" id="prodThumbs"></div>
+          <div class="mg-gal-main gal-main" id="galMain">
             <img id="prodMainImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="">
             <button type="button" class="gal-nav prev" id="galPrev" aria-label="Предыдущее фото">‹</button>
             <button type="button" class="gal-nav next" id="galNext" aria-label="Следующее фото">›</button>
             <span class="gal-count" id="galCount"></span>
             <span class="gal-soon" id="galSoon" hidden>Фото скоро появится</span>
+            <span class="mg-gal-zoom" aria-hidden="true">⤢</span>
           </div>
-          <div class="gal-thumbs" id="prodThumbs"></div>
         </div>
 
-        <div class="prod-box">
-          <div class="prod-badges" id="prodBadges"></div>
-          <h1 id="prodTitle" class="prod-title">Загрузка…</h1>
-          <div class="muted prod-sub" id="prodBrand"></div>
+        <div class="mg-pbox">
+          <div class="mg-pseries" id="prodSeries"></div>
+          <h1 id="prodTitle" class="mg-ptitle">Загрузка…</h1>
+          <div class="mg-pmeta">
+            <span id="prodBadges" class="prod-badges"></span>
+            <span class="mg-psku" id="prodBrand"></span>
+          </div>
 
-          <div class="prod-price">
+          <div class="mg-pprice">
             <b id="prodPrice"></b>
-            <span id="prodOld" class="card-old" style="font-size:16px"></span>
+            <span id="prodOld" class="mg-pold"></span>
           </div>
-          <div id="prodBoxInfo" class="muted" style="font-size:13.5px;margin-bottom:16px"></div>
+          <div class="mg-pchips" id="prodChips"></div>
+          <p id="prodDesc" class="mg-pdesc"></p>
 
-          <div class="prod-facts" id="prodFacts"></div>
+          <button type="button" class="mg-geo" id="prodGeoBtn">
+            <span class="mg-geo-ic">⟷</span>
+            <span><b>Геометрия и характеристики</b><small id="prodGeoSub"></small></span>
+            <span class="mg-geo-go">Подробнее ▾</span>
+          </button>
+          <div class="prod-facts" id="prodFacts" hidden></div>
 
-          <div class="prod-calc">
-            <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end">
-              <div class="field">
-                <label for="prodArea">Нужная площадь, м²</label>
-                <input type="number" id="prodArea" class="inp" value="12" min="1" step="0.5" inputmode="decimal">
+          <div class="mg-calc">
+            <div class="mg-calc-hd"><b>Калькулятор количества</b>
+              <div class="mg-seg" id="prodUnit" role="group" aria-label="Единицы">
+                <button type="button" class="on" data-unit="m2">м²</button>
+                <button type="button" data-unit="box">упаковки</button>
               </div>
-              <label style="display:flex;align-items:center;gap:6px;font-size:13px;padding-bottom:10px">
-                <input type="checkbox" id="prodMargin" checked> +10% на подрезку
-              </label>
             </div>
-            <div id="prodCalcRes" style="margin-top:10px;font-size:14px"></div>
+            <div class="mg-step">
+              <button type="button" id="prodMinus" aria-label="Меньше">−</button>
+              <input type="number" id="prodArea" value="12" min="0.5" step="0.5" inputmode="decimal" aria-label="Количество">
+              <button type="button" id="prodPlus" aria-label="Больше">+</button>
+            </div>
+            <label class="mg-check"><input type="checkbox" id="prodMargin" checked> +10% на подрезку и запас</label>
+            <div class="mg-calc-res" id="prodCalcRes"></div>
+            <div id="prodBoxInfo" class="mg-calc-note"></div>
           </div>
 
-          <div class="prod-actions">
-            <button type="button" class="btn btn-gold" id="prodAddCart" style="flex:1 1 220px">Добавить в заявку</button>
-            <button type="button" class="btn btn-portoro" id="prodAskPrice" style="flex:1 1 160px">Узнать цену</button>
-            <a href="designer.html" class="btn btn-ghost" id="prodTry3d">Примерить в 3D</a>
+          <div class="mg-pactions prod-actions">
+            <button type="button" class="mg-btn mg-btn-copper mg-btn-lg" id="prodAddCart">Добавить в заявку</button>
+            <button type="button" class="mg-btn mg-btn-dark mg-btn-lg" id="prodAskPrice">Узнать цену</button>
+            <div class="mg-pact-row">
+              <a href="designer.html" class="mg-btn mg-btn-ghost" id="prodTry3d">Примерить в 3D</a>
+              <button type="button" class="mg-sq c-fav" id="prodFav" aria-label="В избранное"></button>
+              <button type="button" class="mg-sq" id="prodShare" aria-label="Поделиться"></button>
+            </div>
           </div>
 
-          <h4 class="prod-h4">Наличие на складах</h4>
-          <div id="prodBranchStock" class="stock-rows"></div>
+          <div class="mg-feats" id="prodFeats"></div>
 
-          <p id="prodDesc" class="prod-desc"></p>
-
-          <h4 class="prod-h4">Характеристики</h4>
-          <table class="spec-tbl" id="prodSpecs"></table>
+          <div class="mg-pinfo">
+            <h4>Наличие на складах</h4>
+            <div id="prodBranchStock" class="stock-rows"></div>
+            <div class="mg-pinfo-links">
+              <a href="delivery.html" id="prodDeliv"></a>
+              <button type="button" data-lead="Вопрос по товару" id="prodAsk"></button>
+              <a href="contacts.html" id="prodSalons"></a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <section style="margin-top:56px">
-        <div class="sec-head" style="display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:18px">
-          <h2 style="margin:0">Похожие позиции</h2>
-          <a href="catalog.html" class="btn btn-ghost btn-sm">Весь каталог →</a>
+      <section class="mg-ptabs" id="prodTabs">
+        <div class="mg-ptabs-nav" role="tablist">
+          <button type="button" class="on" data-pt="desc" role="tab">Описание</button>
+          <button type="button" data-pt="spec" role="tab">Характеристики</button>
+          <button type="button" data-pt="deliv" role="tab">Доставка и оплата</button>
         </div>
-        <div class="rail" id="prodRelated"></div>
+        <div class="mg-ptab on" data-pp="desc"><div id="prodDescFull"></div></div>
+        <div class="mg-ptab" data-pp="spec"><table class="spec-tbl" id="prodSpecs"></table></div>
+        <div class="mg-ptab" data-pp="deliv" id="prodDelivTab"></div>
+      </section>
+
+      <section class="mg-related">
+        <div class="mg-sh mg-sh-row">
+          <div><h2>Похожие позиции</h2></div>
+          <a href="catalog.html" class="mg-ulink">Весь каталог</a>
+        </div>
+        <div class="mg-grid" id="prodRelated"></div>
       </section>
     </div>
+
+    <div class="mg-sticky" id="prodSticky" aria-hidden="true">
+      <div class="wrap mg-sticky-in">
+        <img id="stImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" width="48" height="48">
+        <div class="mg-sticky-t"><b id="stName"></b><small id="stMeta"></small></div>
+        <b class="mg-sticky-p" id="stPrice"></b>
+        <button type="button" class="mg-btn mg-btn-copper" id="stAdd">Добавить в заявку</button>
+      </div>
+    </div>
+
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр фото">
       <img id="lbImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="">
       <button type="button" class="lb-close" id="lbClose" aria-label="Закрыть">✕</button>
