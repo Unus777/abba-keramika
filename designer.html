@@ -13,8 +13,53 @@
   <script defer src="data.js"></script>
   <script defer src="assets/js/app.js"></script>
   <script defer src="assets/js/fit3d.js?v=2"></script>
+  <script>
+    (function () {
+      var brief = false, reduce = false;
+      try { brief = !!sessionStorage.getItem('abba-pl'); } catch (e) {}
+      try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+      var root = document.documentElement;
+      if (reduce && brief) return;
+      root.classList.add(reduce ? 'preload-reduce' : brief ? 'preload-brief' : 'is-loading');
+      var max = reduce ? 280 : brief ? 400 : 2500;
+      var min = reduce ? 0 : brief ? 200 : 1400;
+      var done = false, t0 = Date.now();
+      function hide() {
+        if (done) return;
+        done = true;
+        root.classList.add('preload-done');
+        try { sessionStorage.setItem('abba-pl', '1'); } catch (e) {}
+        setTimeout(function () {
+          root.classList.remove('is-loading', 'preload-brief', 'preload-reduce');
+          var el = document.getElementById('abbaPreloader');
+          if (el) el.remove();
+        }, 700);
+      }
+      function ready() {
+        var wait = min - (Date.now() - t0);
+        setTimeout(hide, wait > 0 ? wait : 0);
+      }
+      if (document.readyState === 'complete') ready();
+      else window.addEventListener('load', ready);
+      setTimeout(hide, max);
+    })();
+  </script>
+  <noscript><style>.abba-pl{display:none!important}</style></noscript>
 </head>
 <body class="mg">
+  <div id="abbaPreloader" class="abba-pl" role="status" aria-live="polite" aria-label="Загрузка">
+    <div class="abba-pl-stage">
+      <div class="abba-pl-mosaic">
+        <span></span><span></span><span></span>
+        <span></span>
+        <span class="abba-pl-mark"><svg viewBox="0 0 72 72" aria-hidden="true"><path d="M10 57 Q25 44 36 48 T63 24" fill="none" stroke="#C98A5E" stroke-width="1.6" stroke-opacity=".85"/><path d="M36 13 L54 57 H46.4 L42.2 46.6 H29.8 L25.6 57 H18 L36 13 Z M36 25.8 L32 39.4 H40 L36 25.8 Z" fill="#F4F1EC"/></svg></span>
+        <span></span>
+        <span></span><span></span><span></span>
+      </div>
+      <div class="abba-pl-brand"><b>АББА</b><small>керамика</small></div>
+    </div>
+  </div>
+
   <header id="siteHeader" class="hd"></header>
   <main class="sec" style="padding-top:24px">
     <div class="wrap">
