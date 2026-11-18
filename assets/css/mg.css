@@ -868,3 +868,12 @@ html.mv-on .mv-wait.mv-in { opacity: 1; transform: none; transition: opacity .7s
 @media (min-width: 1500px) { .mg-slide { flex-basis: auto; } }
 @media (max-width: 1000px) { .mg-hero-view { height: 520px; } }
 @media (max-width: 560px) { .mg-slide { flex-basis: auto; } .mg-hero-view { height: 440px; } }
+
+/* v2.1: полоса цифр на главной — 3 пункта (без суммарных м² на складах) */
+.mg-stats { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) {
+  .mg-stats { grid-template-columns: repeat(3, 1fr); }
+  .mg-stats div:nth-child(3) { border-left: 1px solid var(--mg-line); }
+  .mg-stats div:nth-child(n+3) { border-top: 0; }
+}
+@media (max-width: 600px) { .ab-stats { grid-template-columns: 1fr 1fr; } }

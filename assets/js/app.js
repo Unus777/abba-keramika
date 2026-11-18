@@ -1162,7 +1162,7 @@
       else if (sec.type === 'list') body = '<ul class="ab-list">' + items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>';
       else if (sec.type === 'steps') body = '<ol class="ab-steps">' + items.map(function (t, i) { var x = splitItem(t); return '<li class="mv" style="--d:' + (i * 80) + 'ms"><span class="ab-n">' + String(i + 1).padStart(2, '0') + '</span><b>' + esc(x.h) + '</b>' + (x.t ? '<small>' + esc(x.t) + '</small>' : '') + '</li>'; }).join('') + '</ol>';
       else if (sec.type === 'phones') body = '<div class="ab-phones">' + items.map(function (t) { var x = splitItem(t); return '<div class="ab-phone"><span>' + esc(x.h) + '</span><b>' + phoneLinks(x.t || x.h) + '</b></div>'; }).join('') + '</div>';
-      else if (sec.type === 'stats') body = '<div class="ab-stats">' + items.map(function (t) {
+      else if (sec.type === 'stats') body = '<div class="ab-stats">' + items.filter(function (t) { return String(t).indexOf('{stock}') < 0; }).map(function (t) {
         var p = String(t).split('|');
         var v = String(p[0] || '').replace('{stock}', st.stock).replace('{count}', st.count);
         var n = Number(String(v).replace(/\s/g, ''));

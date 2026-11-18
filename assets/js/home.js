@@ -39,10 +39,6 @@
     var heroEl = d.getElementById('hero');
 
     /* ---------- 1. Тексты первого экрана из админки ---------- */
-    var totalM2 = PRODUCTS.reduce(function (s, p) {
-      var m = p.branch_stock && p.branch_stock.m2;
-      return s + (m ? Number(m.msk || 0) + Number(m.tver || 0) : 0);
-    }, 0);
     var count = PRODUCTS.length;
     var t = d.getElementById('heroTitle');
     if (t && hero.title) t.innerHTML = hero.title;
@@ -58,8 +54,6 @@
     });
     var sSku = d.getElementById('statSku');
     if (sSku) sSku.textContent = count;
-    var sStock = d.getElementById('statStock');
-    if (sStock) sStock.textContent = totalM2 > 0 ? U.num(Math.round(totalM2 / 10) * 10) : '—';
 
     /* ---------- 2. Лента интерьеров (плавный сдвиг, без прелоадера) ---------- */
     // Предпочитаем фото в интерьере: у карточек первые 1–3 фото — обычно постер с инфографикой
