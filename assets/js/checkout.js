@@ -33,7 +33,7 @@
       var zone = zoneSel ? zoneSel.value : 'moscow';
       var del = U.delivery(t.sum, zone);
       var discRub = Math.round(t.sum * promoDisc / 100);
-      var total = Math.max(0, t.sum - discRub + del.cost);
+      var total = Math.max(0, t.sum - discRub);
 
       sumEl.innerHTML =
         '<h3 style="margin-top:0">Ваш заказ (' + t.boxes + ' уп.)</h3>' +
@@ -44,9 +44,9 @@
         '</div>' +
         '<div class="sum-row"><span>Общая площадь / вес</span><b>' + t.area.toFixed(2) + ' м² · ' + Math.round(t.weight) + ' кг</b></div>' +
         (discRub > 0 ? '<div class="sum-row"><span>Скидка по промокоду</span><b style="color:var(--ok)">−' + U.rub(discRub) + '</b></div>' : '') +
-        '<div class="sum-row"><span>' + U.esc(del.text) + '</span><b>' + (del.cost === 0 ? 'Бесплатно' : U.rub(del.cost)) + '</b></div>' +
+        '<div class="sum-row"><span>Доставка</span><b>' + (zone === 'pickup' ? 'самовывоз из салона' : 'рассчитает менеджер') + '</b></div>' +
         (t.noPrice ? '<div class="sum-row" style="color:var(--tx2)"><span>Позиции с ценой по запросу</span><b>' + t.noPrice + ' шт.</b></div>' : '') +
-        '<div class="sum-total"><span>К оплате</span><span>' + (t.noPrice ? (t.sum > 0 ? 'от ' + U.rub(total) : 'рассчитает менеджер') : U.rub(total)) + '</span></div>' +
+        '<div class="sum-total"><span>' + (zone === 'pickup' ? 'Итого' : 'Итого без доставки') + '</span><span>' + (t.noPrice ? (t.sum > 0 ? 'от ' + U.rub(total) : 'рассчитает менеджер') : U.rub(total)) + '</span></div>' +
         (t.noPrice ? '<p class="muted" style="font-size:12.5px;margin:8px 0 0">Менеджер свяжется с вами, подтвердит цену, наличие и стоимость доставки. Оплата — только после согласования.</p>' : '');
     }
 
@@ -84,7 +84,7 @@
       var zone = zoneSel ? zoneSel.value : 'moscow';
       var del = U.delivery(t.sum, zone);
       var discRub = Math.round(t.sum * promoDisc / 100);
-      var total = Math.max(0, t.sum - discRub + del.cost);
+      var total = Math.max(0, t.sum - discRub);
 
       var payload = {
         type: 'Заказ с сайта',
@@ -101,7 +101,7 @@
         delivery_cost: del.cost,
         total_amount: total,
         items: t.items.map(function (r) {
-          return { id: r.item.id, sku: r.item.sku, name: r.item.name, qty: r.q, price: r.boxPrice, line: r.line };
+          return { id: r.item.id, name: r.item.name, qty: r.q, price: r.boxPrice, line: r.line };
         })
       };
 
@@ -122,7 +122,7 @@
             '<div style="text-align:center;padding:24px 10px">' +
             '  <span class="tag tag-gold">Заказ оформлен</span>' +
             '  <h2 style="margin:12px 0">Спасибо! Заказ ' + U.esc(r.order_number || '') + ' принят</h2>' +
-            '  <p class="muted">Менеджер выбранного филиала Абба Керамика проверит резерв на складе и свяжется с вами в рабочее время салона.</p>' +
+            '  <p class="muted">Менеджер выбранного филиала АББА Керамика проверит резерв на складе и свяжется с вами в рабочее время салона.</p>' +
             '  <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">' +
             '    <a href="account.html" class="btn btn-gold">Мои заказы</a>' +
             '    <a href="catalog.html" class="btn btn-ghost">Продолжить выбор</a>' +

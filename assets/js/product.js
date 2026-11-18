@@ -10,7 +10,9 @@
     if (!slug && location.pathname.indexOf('/product/') >= 0) slug = location.pathname.split('/product/').pop().replace(/\.html$/, '');
 
     var p = slug && U.byId(slug);
-    if (!p && slug) p = (U.products || []).filter(function (x) { return x.sku === slug || x.slug === slug; })[0];
+    if (!p && slug) p = (U.products || []).filter(function (x) { return x.slug === slug; })[0];
+    // старые ссылки вида «elli-krem-60x60-vhp600853» ведут на новую страницу без артикула
+    if (!p && slug && /-[a-z]{2,4}\d{4,}[a-z]?$/i.test(slug)) { var s2 = slug.replace(/-[a-z]{2,4}\d{4,}[a-z]?$/i, ''); p = (U.products || []).filter(function (x) { return x.slug === s2; })[0]; }
     if (!p) {
       $('prodRoot').innerHTML = '<div class="panel-card" style="text-align:center;padding:48px 20px"><h2>Позиция не найдена</h2><p class="muted">Возможно, она снята с продажи. Посмотрите похожие в каталоге.</p><a href="catalog.html" class="btn btn-gold">Перейти в каталог</a></div>';
       return;
@@ -18,9 +20,9 @@
     var hasPhoto = !p.nophoto && p.imgs && p.imgs.length > 0;
     var priced = U.hasPrice(p);
 
-    d.title = p.name + ' ' + U.size(p) + ' — керамогранит | Абба Керамика';
+    d.title = p.name + ' ' + U.size(p) + ' — керамогранит | АББА Керамика';
     var md = d.querySelector('meta[name="description"]');
-    if (md) md.setAttribute('content', 'Керамогранит ' + p.name + ' ' + U.size(p) + ', ' + String(p.surf || '').toLowerCase() + ' поверхность. ' + U.stockInfo(p).text + '. Абба Керамика — Мытищи, Москва, Тверь.');
+    if (md) md.setAttribute('content', 'Керамогранит ' + p.name + ' ' + U.size(p) + ', ' + String(p.surf || '').toLowerCase() + ' поверхность. ' + U.stockInfo(p).text + '. АББА Керамика — Москва, Мытищи, Тверь.');
 
     $('prodBread').innerHTML = '<a href="index.html">Главная</a><span>›</span><a href="catalog.html">Каталог</a><span>›</span><a href="catalog.html?size=' + encodeURIComponent(p.w + 'x' + p.h) + '">' + U.esc(p.w + '×' + p.h) + '</a><span>›</span><a href="catalog.html?design=' + encodeURIComponent(p.design) + '">' + U.esc(U.label('designs', p.design)) + '</a><span>›</span><b>' + U.esc(p.name) + '</b>';
 
@@ -87,7 +89,7 @@
     var coll = String(p.coll || '').replace(/^Коллекция\s+/, '');
     $('prodSeries').textContent = (coll ? 'Коллекция ' + coll : 'Керамогранит') + ' · ' + U.size(p);
     $('prodTitle').textContent = p.name;
-    $('prodBrand').textContent = 'Арт. ' + (p.sku || p.id);
+    $('prodBrand').textContent = p.brand || 'АББА Керамика';
     $('prodPrice').innerHTML = priced ? U.esc(U.rub(p.price)) + '<small> / м²</small>' : '<span class="price-ask">Цена по запросу</span>';
     var oldEl = $('prodOld');
     if (priced && p.old && p.old > p.price) { oldEl.textContent = U.rub(p.old); } else oldEl.style.display = 'none';
@@ -106,7 +108,7 @@
     var shortDesc = desc.length > 180 ? desc.slice(0, desc.lastIndexOf(' ', 180)) + '…' : desc;
     $('prodDesc').innerHTML = U.esc(shortDesc) + (desc.length > 180 ? ' <a href="#prodTabs" class="mg-ulink" id="descMore">Читать полностью</a>' : '');
     $('prodDescFull').innerHTML = '<h3>О товаре</h3><p>' + U.esc(desc) + '</p>' +
-      '<p class="muted">Оттенок и рисунок на экране могут немного отличаться от живой плитки. Приезжайте посмотреть образцы в шоу-румах в Мытищах, Москве и Твери — или попросите менеджера прислать фото из конкретной партии.</p>';
+      '<p class="muted">Оттенок и рисунок на экране могут немного отличаться от живой плитки. Приезжайте посмотреть образцы в шоу-румах в Москве, Мытищах и Твери — или попросите менеджера прислать фото из конкретной партии.</p>';
 
     // свойства с иконками
     var apps = (p.apps || ['floor', 'wall']).map(function (a) { return U.label('apps', a); }).join(' и ').toLowerCase();
@@ -133,7 +135,7 @@
     var shb = $('prodShare');
     shb.innerHTML = U.ic('share');
     shb.onclick = function () {
-      var data = { title: p.name + ' — Абба Керамика', url: location.href };
+      var data = { title: p.name + ' — АББА Керамика', url: location.href };
       if (navigator.share) navigator.share(data).catch(function () {});
       else if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { U.toast('Ссылка скопирована'); });
     };
@@ -155,6 +157,7 @@
       rows.push(['Склад Москва', Number(m2.msk) > 0 ? 'ok' : 'order', Number(m2.msk) > 0 ? fm(m2.msk) + ' м²' : 'под заказ']);
       rows.push(['Склад Тверь', Number(m2.tver) > 0 ? 'ok' : 'order', Number(m2.tver) > 0 ? fm(m2.tver) + ' м²' : 'под заказ']);
       rows.push(['Шоу-рум Мытищи', Number(m2.msk) > 0 ? 'ok' : 'order', Number(m2.msk) > 0 ? 'доставка со склада 1–2 дня' : 'привезём под заказ']);
+      if (p.stock_status === 'supplier') rows = [['Склад поставщика', 'ok', Number(p.supplier_m2) > 0 ? fm(p.supplier_m2) + ' м²' : 'есть'], ['Шоу-румы', 'order', 'привезём под заказ — срок уточнит менеджер']];
     } else {
       U.branches().forEach(function (b) { var st = bs[b.id] || p.stock_status || 'pre_order'; rows.push([b.short_name, st === 'in_stock' ? 'ok' : 'order', U.label('stock', st)]); });
     }
@@ -201,7 +204,7 @@
       U.openLead({
         title: priced ? 'Быстрый заказ — ' + p.name : 'Узнать цену — ' + p.name,
         type: priced ? 'Быстрый заказ товара' : 'Запрос цены',
-        comment: p.name + ' ' + U.size(p) + ' (арт. ' + (p.sku || p.id) + '), ' + boxes + ' уп. / ' + (boxes * per).toFixed(2) + ' м²'
+        comment: p.name + ' ' + U.size(p) + ', ' + boxes + ' уп. / ' + (boxes * per).toFixed(2) + ' м²'
       });
     };
     $('prodTry3d').href = 'designer.html?tile=' + encodeURIComponent(p.id);
@@ -224,7 +227,6 @@
 
     // ---------- характеристики ----------
     var spec = [
-      ['Артикул', p.sku || p.id],
       ['Коллекция', p.coll],
       ['Бренд', p.brand],
       ['Формат', U.size(p)],
@@ -245,6 +247,13 @@
       if (r[0] === 'Страна' && p.country) v = '<a href="catalog.html?country=' + encodeURIComponent(p.country) + '" style="text-decoration:underline">' + v + '</a>';
       return '<tr><td>' + U.esc(r[0]) + '</td><td>' + v + '</td></tr>';
     }).join('');
+
+    // ---------- schema.org Product (без артикула поставщика) ----------
+    try {
+      var ld = { '@context': 'https://schema.org', '@type': 'Product', name: p.name + ' ' + U.size(p), brand: { '@type': 'Brand', name: p.brand || 'АББА Керамика' }, category: 'Керамогранит', description: p.description || '', image: imgs.filter(function (x) { return !/^data:/.test(x); }).slice(0, 4).map(function (x) { return new URL(x, location.href).href; }) };
+      if (priced) ld.offers = { '@type': 'Offer', priceCurrency: 'RUB', price: p.price, availability: p.stock_status === 'in_stock' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder' };
+      var sc = d.createElement('script'); sc.type = 'application/ld+json'; sc.textContent = JSON.stringify(ld); d.head.appendChild(sc);
+    } catch (e) {}
 
     // ---------- похожие ----------
     var rel = (U.products || []).filter(function (x) { return x.id !== p.id && !x.is_hidden; }).map(function (x) {

@@ -14,7 +14,7 @@
     var countEl = $('catCount'), chipsEl = $('catChips'), pagEl = $('catPag'), filtersEl = $('catFilters');
 
     var SW = { white: '#F3F0EA', beige: '#D9C7A8', grey: '#A3A29E', brown: '#8A6146', dark: '#2C2C2C', black: '#151515', gold: 'linear-gradient(135deg,#1b1b1b,#c49a52)', color: 'linear-gradient(135deg,#C79A5B,#5E7C76)' };
-    var GROUPS = ['design', 'color', 'room', 'surf', 'size', 'country', 'coll'];
+    var GROUPS = ['brand', 'design', 'color', 'room', 'surf', 'size', 'country', 'coll'];
     var FLAGS = { stock: 'В наличии', msk: 'Склад Москва', tver: 'Склад Тверь', new: 'Новинки', photo: 'С фото' };
 
     function m2(p, k) { var b = p.branch_stock || {}; return Number((b.m2 || {})[k] || 0); }
@@ -31,7 +31,7 @@
     var maxP = priced.reduce(function (m, p) { return Math.max(m, Number(p.price)); }, 0);
     maxP = Math.ceil(maxP / 100) * 100;
 
-    var state = { q: '', design: [], color: [], room: [], surf: [], size: [], country: [], coll: [], flags: [], maxPrice: maxP || 0, sort: 'popular', page: 1 };
+    var state = { q: '', brand: [], design: [], color: [], room: [], surf: [], size: [], country: [], coll: [], flags: [], maxPrice: maxP || 0, sort: 'popular', page: 1 };
 
     var sp = new URLSearchParams(location.search);
     if (sp.get('q')) state.q = sp.get('q');
@@ -86,6 +86,9 @@
     var ctryKeys = Object.keys(ctryMap);
     var noCtry = PRODUCTS.filter(function (p) { return !p.country; }).length;
     mountFacet('fltCountry', 'country', (ctryKeys.length >= 2 || (ctryKeys.length === 1 && noCtry > 0) || state.country.length) ? byCount(ctryMap, function (k) { return k; }) : []);
+    // Бренд (АББА Керамика, Global Tile, …) — показываем, когда брендов больше одного
+    var brandMap = countBy(function (p) { return p.brand; });
+    mountFacet('fltBrand', 'brand', (Object.keys(brandMap).length >= 2 || state.brand.length) ? byCount(brandMap, function (k) { return k; }) : []);
     // Коллекции из 2+ позиций
     var collMap = countBy(function (p) { return p.coll; });
     mountFacet('fltColl', 'coll', Object.keys(collMap).filter(function (k) { return collMap[k] > 1 || state.coll.indexOf(k) >= 0; }).sort(function (a, b) { return a.localeCompare(b, 'ru'); }).map(function (k) { return { key: k, label: k.replace(/^Коллекция\s+/, ''), count: collMap[k] }; }));
@@ -94,7 +97,7 @@
 
     function norm(s) { return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[×х*]/g, 'x').replace(/\s+/g, ' '); }
     function hay(p) {
-      return norm([p.name, p.sku, p.coll, p.color, p.surf, p.country, p.brand, p.w + 'x' + p.h, U.label('designs', p.design), U.label('colors', p.cg)].join(' '));
+      return norm([p.name, p.coll, p.color, p.surf, p.country, p.brand, p.w + 'x' + p.h, U.label('designs', p.design), U.label('colors', p.cg)].join(' '));
     }
 
     function matches(p, skip) {
@@ -102,6 +105,7 @@
         var h = hay(p);
         if (!norm(state.q).split(' ').every(function (t) { return !t || h.indexOf(t) >= 0; })) return false;
       }
+      if (skip !== 'brand' && state.brand.length && state.brand.indexOf(p.brand) < 0) return false;
       if (skip !== 'design' && state.design.length && state.design.indexOf(p.design) < 0) return false;
       if (skip !== 'color' && state.color.length && state.color.indexOf(p.cg) < 0) return false;
       if (skip !== 'surf' && state.surf.length && state.surf.indexOf(p.surf) < 0) return false;
@@ -126,6 +130,7 @@
           if (g === 'surf') return p.surf === v;
           if (g === 'room') return (p.rooms || []).indexOf(v) >= 0;
           if (g === 'country') return p.country === v;
+          if (g === 'brand') return p.brand === v;
           if (g === 'coll') return p.coll === v;
           return false;
         }).length;
@@ -181,8 +186,8 @@
 
     var pillsEl = $('catPills');
     var PILLS = [{ g: '', v: '', t: 'Все' }];
-    Object.keys(sizeMap).sort(function (a, b) { return sizeMap[b] - sizeMap[a]; }).forEach(function (k) { PILLS.push({ g: 'size', v: k, t: k.replace('x', '×') }); });
-    ['marble', 'stone', 'concrete', 'wood', 'plain'].forEach(function (k) { if (PRODUCTS.some(function (p) { return p.design === k; })) PILLS.push({ g: 'design', v: k, t: U.label('designs', k) }); });
+    Object.keys(sizeMap).filter(function (k) { return sizeMap[k] >= 8; }).sort(function (a, b) { return sizeMap[b] - sizeMap[a]; }).slice(0, 10).forEach(function (k) { PILLS.push({ g: 'size', v: k, t: k.replace('x', '×') }); });
+    ['marble', 'stone', 'concrete', 'wood', 'plain', 'decor'].forEach(function (k) { if (PRODUCTS.some(function (p) { return p.design === k; })) PILLS.push({ g: 'design', v: k, t: U.label('designs', k) }); });
     PILLS.push({ g: 'flag', v: 'new', t: 'Новинки' });
     function renderPills() {
       if (!pillsEl) return;

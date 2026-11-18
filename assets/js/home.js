@@ -48,7 +48,7 @@
     if (t && hero.title) t.innerHTML = hero.title;
     var map = {
       heroEyebrow: hero.eyebrow,
-      heroSub: hero.subtitle ? String(hero.subtitle).replace('{count}', count) : '',
+      heroSub: hero.subtitle ? String(hero.subtitle).replace(/\{count\}\s+позиц(ий|ии|ия)/, count + ' ' + U.plural(count, 'позиция', 'позиции', 'позиций')).replace('{count}', count) : '',
       heroCtaPrimary: hero.cta_primary,
       heroCtaSecondary: hero.cta_secondary
     };
@@ -73,21 +73,28 @@
       var p = U.byId(s.id);
       return p && p.imgs && p.imgs.length >= 5 ? { p: p, img: interior(p, s.img), kicker: s.kicker } : null;
     }).filter(Boolean);
-    PRODUCTS.filter(function (p) { return !p.is_hidden && p.imgs && p.imgs.length >= 6 && !showcase.some(function (s) { return s.p.id === p.id; }); })
+    PRODUCTS.filter(function (p) { return !p.is_hidden && p.stock_status !== 'supplier' && p.imgs && p.imgs.length >= 6 && !showcase.some(function (s) { return s.p.id === p.id; }); })
       .sort(function (a, b) { return Number(b.stock_qty || 0) - Number(a.stock_qty || 0); })
       .slice(0, Math.max(0, 7 - showcase.length))
       .forEach(function (p) { showcase.push({ p: p, img: interior(p), kicker: U.label('designs', p.design) }); });
+
+    // Слайды первого экрана из админки: чистые фото интерьеров целиком (без обрезки)
+    var heroSlides = (Array.isArray(cfg.hero_slides) ? cfg.hero_slides : []).filter(function (s) { return s && s.img; }).map(function (s) {
+      var p = s.product_id ? U.byId(s.product_id) : null;
+      return { img: s.img, title: s.title || (p ? p.name : ''), caption: s.caption || (p ? [U.size(p), p.surf].filter(Boolean).join(' · ') : ''), href: s.href || (p ? U.url(p) : 'catalog.html'), p: p };
+    });
+    if (!heroSlides.length) heroSlides = showcase.map(function (s) { return { img: s.img, title: s.p.name, caption: [U.size(s.p), s.p.surf].filter(Boolean).join(' · '), href: U.url(s.p), p: s.p, kicker: s.kicker }; });
 
     var track = d.getElementById('stageSlides');
     var dotsEl = d.getElementById('stageThumbs');
     var stage = d.getElementById('heroStage');
     var view = d.getElementById('heroView');
     var cur = 0, timer = null, paused = false;
-    if (track && showcase.length) {
-      track.innerHTML = showcase.map(function (s, i) {
-        return '<a class="mg-slide" href="' + U.url(s.p) + '" data-i="' + i + '">' +
-          '<img src="' + U.esc(s.img) + '" alt="' + U.esc(s.p.name + ' в интерьере') + '"' + (i < 2 ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async">' +
-          '<span class="mg-slide-cap"><small>' + U.esc(s.kicker || U.label('designs', s.p.design)) + '</small><b>' + U.esc(s.p.name) + '</b><em>' + U.esc([U.size(s.p), s.p.surf].filter(Boolean).join(' · ')) + '</em><i>→</i></span></a>';
+    if (track && heroSlides.length) {
+      track.innerHTML = heroSlides.map(function (s, i) {
+        return '<a class="mg-slide" href="' + U.esc(s.href) + '" data-i="' + i + '">' +
+          '<img src="' + U.esc(s.img) + '" alt="' + U.esc((s.title || 'Керамогранит') + ' в интерьере') + '"' + (i < 2 ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async">' +
+          '<span class="mg-slide-cap"><b>' + U.esc(s.title || '') + '</b><em>' + U.esc(s.caption || '') + '</em><i>→</i></span></a>';
       }).join('');
       var slides = track.querySelectorAll('.mg-slide');
       var visible = function () { var sw = slides[0].getBoundingClientRect().width || 1; return Math.max(1, Math.round(view.clientWidth / sw)); };
@@ -143,11 +150,11 @@
       var cats = [];
       var sizeMap = {};
       PRODUCTS.forEach(function (p) { if (p.w && p.h) (sizeMap[p.w + 'x' + p.h] = sizeMap[p.w + 'x' + p.h] || []).push(p); });
-      Object.keys(sizeMap).sort(function (a, b) { return sizeMap[b].length - sizeMap[a].length; }).forEach(function (k) {
+      Object.keys(sizeMap).filter(function (k) { return sizeMap[k].length >= 8; }).sort(function (a, b) { return sizeMap[b].length - sizeMap[a].length; }).slice(0, 9).forEach(function (k) {
         var pref = sizeMap[k].filter(function (p) { return p.design === (k === '60x60' ? 'stone' : 'marble'); });
         cats.push({ href: 'catalog.html?size=' + k, title: k.replace('x', '×'), big: true, n: sizeMap[k].length, img: texOf(pref.length ? pref : sizeMap[k]) });
       });
-      ['marble', 'stone', 'concrete', 'wood'].forEach(function (k) {
+      ['marble', 'stone', 'concrete', 'wood', 'decor'].forEach(function (k) {
         var list = PRODUCTS.filter(function (p) { return p.design === k; });
         if (list.length) cats.push({ href: 'catalog.html?design=' + k, title: U.label('designs', k), n: list.length, img: texOf(list) });
       });
@@ -261,7 +268,7 @@
           '    <div class="rev-stars" title="' + (r.rating || 5) + ' из 5">' + stars + '</div>' +
           '  </div>' +
           '  <p class="rev-text">«' + U.esc(r.text) + '»</p>' +
-          (r.reply_text ? '<div class="rev-reply"><b>Ответ Абба Керамика</b>' + U.esc(r.reply_text) + '</div>' : '') +
+          (r.reply_text ? '<div class="rev-reply"><b>Ответ АББА Керамика</b>' + U.esc(r.reply_text) + '</div>' : '') +
           '  <div class="muted" style="font-size:11.5px;margin-top:auto">' + U.esc(r.date_text || '') + '</div>' +
           '</article>'
         );

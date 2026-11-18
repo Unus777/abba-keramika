@@ -8,13 +8,13 @@
 
     var wrap = d.createElement('div');
     wrap.innerHTML =
-      '<button type="button" class="ast-fab" id="astFab" aria-label="Консультант Абба Керамика">' +
+      '<button type="button" class="ast-fab" id="astFab" aria-label="Консультант АББА Керамика">' +
       '  <span style="width:9px;height:9px;border-radius:50%;background:#E4B858;display:inline-block"></span>' +
-      '  <span>Абба-консультант</span>' +
+      '  <span>АББА-консультант</span>' +
       '</button>' +
       '<div class="ast-panel" id="astPanel">' +
       '  <div class="ast-hd">' +
-      '    <div><b style="font-size:14px">Абба-консультант</b><div style="font-size:11px;opacity:.78">Помогу подобрать плитку, клей и филиал</div></div>' +
+      '    <div><b style="font-size:14px">АББА-консультант</b><div style="font-size:11px;opacity:.78">Помогу подобрать плитку, клей и филиал</div></div>' +
       '    <button type="button" id="astClose" style="background:none;border:0;color:#FBF4E4;font-size:18px">✕</button>' +
       '  </div>' +
       '  <div class="ast-msgs" id="astMsgs"></div>' +
@@ -44,7 +44,7 @@
       msgs.scrollTop = msgs.scrollHeight;
     }
 
-    push('bot', 'Здравствуйте! Я помогу подобрать керамогранит Абба Керамика, рассчитать упаковки и клей или подсказать адреса в Мытищах, Москве и Твери.');
+    push('bot', 'Здравствуйте! Я помогу подобрать керамогранит АББА Керамика, рассчитать упаковки и клей или подсказать адреса в Москве, Мытищах и Твери.');
 
     function reply(q) {
       var s = String(q || '').toLowerCase();

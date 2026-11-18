@@ -30,6 +30,7 @@
       wood: 'Дерево',
       concrete: 'Бетон и терраццо',
       plain: 'Моноколор',
+      decor: 'Декор и узоры',
       terrazzo: 'Терраццо',
       onyx: 'Оникс',
       mono: 'Моноколор'
@@ -48,6 +49,7 @@
       in_stock: 'В наличии',
       awaiting: 'Ожидается поступление',
       pre_order: 'Под заказ',
+      supplier: 'Под заказ со склада поставщика',
       out_of_stock: 'Нет в наличии'
     }
   };
@@ -269,10 +271,10 @@
     return rub(p.price) + (unit === false ? '' : ' / м²');
   }
 
-  // Миниатюра для карточек: uploads/tiles/catalog/ART/01.jpg -> 01_t.jpg
+  // Миниатюра для карточек: …/01.jpg -> …/01_t.jpg
   function thumb(src) {
     var s = String(src || '');
-    return /uploads\/tiles\/catalog\/[^/]+\/\d+\.jpg$/.test(s) ? s.replace(/\.jpg$/, '_t.jpg') : s;
+    return /uploads\/tiles\/(catalog\/[^/]+\/\d+|up\/[a-z0-9]+)\.jpg$/.test(s) ? s.replace(/\.jpg$/, '_t.jpg') : s;
   }
 
   function stockInfo(p) {
@@ -281,6 +283,7 @@
     var qty = m2 ? (Number(m2.msk || 0) + Number(m2.tver || 0)) : Number(p && p.stock_qty || 0);
     if (st === 'in_stock') return { cls: 'ok', text: 'В наличии' + (qty > 0 ? ' · ' + num(Math.round(qty)) + ' м²' : '') };
     if (st === 'awaiting') return { cls: 'soon', text: 'Ожидается поступление' };
+    if (st === 'supplier') return { cls: 'order', text: 'Под заказ · есть на складе поставщика' };
     if (st === 'pre_order') return { cls: 'order', text: 'Под заказ' };
     return { cls: 'off', text: 'Нет в наличии' };
   }
@@ -305,43 +308,9 @@
     return (BASE.cfg && Array.isArray(BASE.cfg.branches) && BASE.cfg.branches.length)
       ? BASE.cfg.branches
       : [
-          {
-            id: 'mytishchi',
-            city: 'Мытищи',
-            short_name: 'Мытищи · Яуза',
-            type_badge: 'Шоу-рум и точка продаж',
-            address: 'г. Мытищи, строительный рынок «Яуза», Осташковское шоссе, вл. 4, стр. 4, павильон ТСК-2-62',
-            phone: '8 (936) 209-01-01',
-            phone_tel: '+79362090101',
-            phone_raw: '89362090101',
-            email: '89362090101@mail.ru',
-            hours: 'Ежедневно 09:00–19:00'
-          },
-          {
-            id: 'moscow',
-            city: 'Москва',
-            short_name: 'Москва · Люблинское поле',
-            type_badge: 'Флагманский павильон',
-            address: 'г. Москва, Тихорецкий бульвар, д. 1, стр. 70, корпус В, ТЦ «Люблинское поле», павильоны В-146, В-147',
-            phone: '8 (936) 302-01-01',
-            phone_tel: '+79363020101',
-            phone_raw: '89363020101',
-            email: '89363020101@mail.ru',
-            hours: 'Ежедневно 10:00–20:00'
-          },
-          {
-            id: 'tver',
-            city: 'Тверь',
-            short_name: 'Тверь · Коминтерна 44',
-            type_badge: 'Шоу-рум и склады',
-            address: 'г. Тверь, ул. Коминтерна, 44 — склад и шоу-рум',
-            warehouse_address: 'Отдельный склад: посёлок Новая Константиновка, д. 1',
-            phone: '8 (930) 096-01-01',
-            phone_tel: '+79300960101',
-            phone_raw: '89300960101',
-            email: '89260025040@mail.ru',
-            hours: 'Пн–Сб 09:00–18:00'
-          }
+          { id: 'moscow', city: 'Москва', short_name: 'Москва · Люблинское поле', address: 'г. Москва, Тихорецкий бульвар, д. 1, стр. 70, корпус В, ТЦ «Люблинское поле», павильоны В-146, В-147', phone: '8 (936) 302-01-01', phone_tel: '+79363020101', email: '89363020101@mail.ru', hours: 'Ежедневно 10:00–20:00, без выходных' },
+          { id: 'mytishchi', city: 'Мытищи', short_name: 'Мытищи · ТСК «Яуза»', address: 'г. Мытищи, строительный рынок «Яуза», Осташковское шоссе, вл. 4, стр. 4, павильон ТСК-2-62', phone: '8 (936) 209-01-01', phone_tel: '+79362090101', email: '89362090101@mail.ru', hours: 'Ежедневно 10:00–18:00, без выходных' },
+          { id: 'tver', city: 'Тверь', short_name: 'Тверь · Коминтерна, 44', address: 'г. Тверь, ул. Коминтерна, 44', warehouse_address: 'Склад: пос. Новая Константиновка, д. 1', phone: '8 (930) 096-01-01', phone_tel: '+79300960101', email: '89260025040@mail.ru', hours: 'Пн–Сб 9:00–18:00, Вс 10:00–15:00' }
         ];
   }
 
@@ -461,15 +430,9 @@
     }
   };
 
-  function delivery(sum, zone) {
-    var del = (BASE.cfg && BASE.cfg.delivery) || { free_from: 50000, moscow: 2500, mo: 3900, tver: 2900 };
-    if (zone === 'pickup') return { cost: 0, text: 'Самовывоз со склада (0 ₽)' };
-    if (sum >= (del.free_from || 50000) && (zone === 'moscow' || !zone)) {
-      return { cost: 0, text: 'Бесплатная доставка по Москве и до ТК' };
-    }
-    if (zone === 'mo') return { cost: del.mo || 3900, text: 'Доставка по МО' };
-    if (zone === 'tver') return { cost: del.tver || 2900, text: 'Доставка по Твери и области' };
-    return { cost: del.moscow || 2500, text: 'Доставка по Москве в пределах МКАД' };
+  // Стоимость доставки рассчитывается индивидуально (вес, адрес, разгрузка, регион)
+  function delivery() {
+    return { cost: 0, text: 'Стоимость доставки рассчитает менеджер', individual: true };
   }
 
   function kit(area) {
@@ -549,7 +512,7 @@
       '<article class="card">' +
       '  <div class="card-img"><img src="' + esc(accImg(a)) + '" alt="' + esc(a.name) + '" loading="lazy"></div>' +
       '  <div class="card-body">' +
-      '    <div class="card-meta"><span>' + esc(a.brand || 'Abba Pro') + '</span><span>' + esc(a.pack || 'уп.') + '</span></div>' +
+      '    <div class="card-meta"><span>' + esc(a.brand || 'АББА') + '</span><span>' + esc(a.pack || 'уп.') + '</span></div>' +
       '    <h3 class="card-title">' + esc(a.name) + '</h3>' +
       '    <div class="card-foot">' +
       '      <div class="card-price"><b>' + rub(a.price) + '</b></div>' +
@@ -564,7 +527,7 @@
     var s = String(q || '').trim().toLowerCase();
     if (!s) return [];
     return (BASE.products || []).filter(function (p) {
-      return (p.name + ' ' + p.sku + ' ' + p.coll + ' ' + size(p) + ' ' + String(size(p)).replace('×', 'x') + ' ' + (p.surf || '') + ' ' + (p.color || '') + ' ' + label('designs', p.design)).toLowerCase().indexOf(s) >= 0;
+      return (p.name + ' ' + (p.brand || '') + ' ' + p.coll + ' ' + size(p) + ' ' + String(size(p)).replace('×', 'x') + ' ' + (p.surf || '') + ' ' + (p.color || '') + ' ' + label('designs', p.design)).toLowerCase().indexOf(s) >= 0;
     }).slice(0, 14);
   }
 
@@ -612,10 +575,10 @@
     Object.keys(labels).forEach(function (k) { if (body[k]) lines.push(labels[k] + ': ' + body[k]); });
     if (Array.isArray(body.items) && body.items.length) {
       lines.push('Состав заявки:');
-      body.items.forEach(function (it) { lines.push('— ' + it.name + (it.sku ? ' (арт. ' + it.sku + ')' : '') + ', ' + it.qty + ' уп.'); });
+      body.items.forEach(function (it) { lines.push('— ' + it.name + ', ' + it.qty + ' уп.'); });
     }
     lines.push('Страница: ' + location.href);
-    var subj = 'Заявка с сайта ' + (num || '') + ' — ' + (body.type || 'Абба Керамика');
+    var subj = 'Заявка с сайта ' + (num || '') + ' — ' + (body.type || 'АББА Керамика');
     var mail = 'mailto:' + br.email + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(lines.join('\n'));
     var old = d.getElementById('staticLeadBg');
     if (old) old.remove();
@@ -656,7 +619,7 @@
     opts = opts || {};
     var m = d.getElementById('leadModal');
     if (!m) return;
-    d.getElementById('leadTitle').textContent = opts.title || 'Оставить заявку в Абба Керамика';
+    d.getElementById('leadTitle').textContent = opts.title || 'Оставить заявку в АББА Керамика';
     d.getElementById('leadType').value = opts.type || 'Заявка с сайта';
     d.getElementById('leadComment').value = opts.comment || '';
     var br = d.getElementById('leadBranch');
@@ -696,12 +659,8 @@
       );
     }).join('');
 
-    var del = delivery(t.sum, 'moscow');
-    var left = Math.max(0, 50000 - t.sum);
     ft.innerHTML =
-      '<div style="font-size:12.5px;color:var(--tx2);margin-bottom:10px">' +
-      (left > 0 ? 'До бесплатной доставки по Москве осталось <b>' + rub(left) + '</b>' : '<b style="color:var(--ok)">Бесплатная доставка по Москве активирована ✓</b>') +
-      '</div>' +
+      '<div style="font-size:12.5px;color:var(--tx2);margin-bottom:10px">Доставка рассчитывается индивидуально — по весу, адресу и условиям разгрузки.</div>' +
       '<div class="sum-row"><span>Площадь / вес</span><b>' + t.area.toFixed(2) + ' м² · ' + Math.round(t.weight) + ' кг</b></div>' +
       (t.noPrice ? '<div style="font-size:12.5px;color:var(--tx2);margin-bottom:8px">Для части позиций цена по запросу — менеджер пришлёт точный расчёт.</div>' : '') +
       '<div class="sum-total" style="margin-bottom:14px"><span>Итого</span><span>' + (t.sum > 0 ? rub(t.sum) + (t.noPrice ? ' +' : '') : 'по запросу') + '</span></div>' +
@@ -735,13 +694,13 @@
     var sizes = {};
     PRODS.forEach(function (p) { if (p.w && p.h) { var k = p.w + 'x' + p.h; sizes[k] = (sizes[k] || 0) + 1; } });
     var sizeKeys = Object.keys(sizes).sort(function (a, b) { return sizes[b] - sizes[a]; });
-    var DESIGNS = ['marble', 'stone', 'concrete', 'wood', 'plain'];
+    var DESIGNS = ['marble', 'stone', 'concrete', 'wood', 'decor', 'plain'];
     var COLORS = [['white', '#F3F0EA'], ['beige', '#D9C7A8'], ['grey', '#A3A29E'], ['brown', '#8A6146'], ['dark', '#2C2C2C'], ['color', 'linear-gradient(135deg,#C79A5B,#5E7C76)']];
     var TICKER = [
-      'Живые образцы плитки в 3 шоу-румах: Мытищи · Москва · Тверь',
-      'Остатки по складам в Москве и Твери — прямо в карточке товара',
+      'Живые образцы плитки в 3 шоу-румах: Москва · Мытищи · Тверь',
+      'Керамогранит напрямую от производителя — без посредников',
       'Бесплатно посчитаем упаковки, клей и затирку под ваш метраж',
-      'Доставка по Москве, области и Твери · самовывоз со склада'
+      'Доставка по Москве, области и Твери — расчёт индивидуально'
     ];
     var navA = function (href, text) { return '<a href="' + href + '" class="mgh-a' + (page === href ? ' on' : '') + '">' + text + '</a>'; };
     if (hd) {
@@ -760,7 +719,7 @@
         '        </div>' +
         '      </div>' +
         '      <a href="calc.html">Калькулятор</a>' +
-        '      <a href="opt.html">Дизайнерам и опт</a>' +
+        '      <a href="opt.html">Дизайнерам</a>' +
         '    </div>' +
         '    <div class="mgh-ticker" aria-live="polite">' +
         '      <button type="button" class="mgh-tk-btn" data-tk="-1" aria-label="Предыдущее">' + ic('chevl') + '</button>' +
@@ -769,7 +728,6 @@
         '    </div>' +
         '    <div class="mgh-top-r">' +
         '      <a href="about.html">О компании</a>' +
-        '      <a href="delivery.html">Доставка</a>' +
         '      <a href="contacts.html">Контакты</a>' +
         '      <a href="tel:' + esc(activeB.phone_tel) + '" class="mgh-top-phone" data-active-phone>' + esc(activeB.phone) + '</a>' +
         '    </div>' +
@@ -787,15 +745,13 @@
         '        <div class="nav-more" id="navMore">' +
         '          <a href="calc.html">Калькулятор расхода</a>' +
         '          <a href="about.html">О компании</a>' +
-        '          <a href="opt.html">Дизайнерам и опт</a>' +
-        '          <a href="masters.html">Мастера по укладке</a>' +
+        '          <a href="opt.html">Дизайнерам и архитекторам</a>' +
         '          <a href="account.html">Личный кабинет и бонусы</a>' +
         '        </div>' +
         '      </div>' +
         '    </nav>' +
-        '    <a href="index.html" class="mgh-logo" aria-label="Абба Керамика — на главную">' +
-        '      <img src="assets/img/mark.svg" alt="" width="40" height="40">' +
-        '      <span><b>АББА</b><small>керамика</small></span>' +
+        '    <a href="index.html" class="mgh-logo" aria-label="АББА Керамика — на главную">' +
+        '      <img src="assets/img/brand/logo.svg" alt="АББА Керамика" width="178" height="60">' +
         '    </a>' +
         '    <div class="mgh-act">' +
         '      <button type="button" class="mgh-ic" id="openSearch" aria-label="Поиск">' + ic('search') + '</button>' +
@@ -855,26 +811,26 @@
       ft.innerHTML =
         '<div class="mgf-adv">' +
         '  <div class="wrap mgf-adv-in">' +
-        '    <div>' + ic('store') + '<b>3 шоу-рума</b><span>Мытищи · Москва · Тверь</span></div>' +
-        '    <div>' + ic('box') + '<b>Склады в Москве и Твери</b><span>Остатки видно на сайте</span></div>' +
+        '    <div>' + ic('store') + '<b>3 шоу-рума</b><span>Москва · Мытищи · Тверь</span></div>' +
+        '    <div>' + ic('box') + '<b>Напрямую от производителя</b><span>Склады в Москве и Твери</span></div>' +
         '    <div>' + ic('calc') + '<b>Бесплатный расчёт</b><span>Упаковки, клей, затирка</span></div>' +
-        '    <div>' + ic('truck') + '<b>Доставка и подъём</b><span>Москва, МО и Тверь</span></div>' +
+        '    <div>' + ic('truck') + '<b>Доставка</b><span>Москва, область и Тверь</span></div>' +
         '  </div>' +
         '</div>' +
         '<div class="mgf-main">' +
         '  <div class="wrap mgf-grid">' +
         '    <div class="mgf-col"><h4>Каталог</h4>' +
-        sizeKeys.map(function (k) { return '<a href="catalog.html?size=' + k + '">Керамогранит ' + k.replace('x', '×') + '</a>'; }).join('') +
+        sizeKeys.filter(function (k) { return sizes[k] >= 8; }).slice(0, 8).map(function (k) { return '<a href="catalog.html?size=' + k + '">Керамогранит ' + k.replace('x', '×') + '</a>'; }).join('') +
         DESIGNS.slice(0, 4).map(function (k) { return '<a href="catalog.html?design=' + k + '">' + esc(label('designs', k)) + '</a>'; }).join('') +
         '    </div>' +
         '    <div class="mgf-col"><h4>Покупателям</h4>' +
         '      <a href="designer.html">3D-примерочная</a>' +
         '      <a href="calc.html">Калькулятор расхода</a>' +
-        '      <a href="delivery.html">Доставка и самовывоз</a>' +
-        '      <a href="masters.html">Мастера по укладке</a>' +
+        '      <a href="delivery.html">Доставка и оплата</a>' +
         '      <a href="account.html">Бонусы и заказы</a>' +
-        '      <a href="opt.html">Дизайнерам и опт</a>' +
+        '      <a href="opt.html">Дизайнерам и архитекторам</a>' +
         '      <a href="about.html">О компании</a>' +
+        '      <a href="contacts.html">Салоны и контакты</a>' +
         '      <a href="privacy.html">Политика конфиденциальности</a>' +
         '    </div>' +
         '    <div class="mgf-col mgf-salons"><h4>Салоны и склады</h4>' +
@@ -884,6 +840,7 @@
             '  <b>' + esc(b.city) + '</b>' +
             '  <span>' + esc(b.address) + '</span>' +
             (b.warehouse_address ? '  <span>' + esc(b.warehouse_address) + '</span>' : '') +
+            (b.hours ? '  <span class="mgf-hours">' + esc(b.hours) + '</span>' : '') +
             '  <a href="tel:' + esc(b.phone_tel) + '" class="mgf-tel">' + esc(b.phone) + '</a>' +
             '  <a href="mailto:' + esc(b.email) + '">' + esc(b.email) + '</a>' +
             '</div>'
@@ -891,15 +848,15 @@
         }).join('') +
         '    </div>' +
         '    <div class="mgf-col mgf-cta">' +
-        '      <a href="index.html" class="mgh-logo mgf-logo" aria-label="Абба Керамика"><img src="assets/img/mark.svg" alt="" width="40" height="40"><span><b>АББА</b><small>керамика</small></span></a>' +
-        '      <p>Керамогранит 60×60 и 60×120 со складов в Москве и Твери. Подбор, расчёт и доставка.</p>' +
+        '      <a href="index.html" class="mgh-logo mgf-logo" aria-label="АББА Керамика"><img src="assets/img/brand/logo-dark.svg" alt="АББА Керамика" width="190" height="64"></a>' +
+        '      <p>Керамогранит и плитка напрямую от производителя. Подбор, расчёт и доставка по Москве, области и Твери.</p>' +
         '      <a href="tel:' + esc(activeB.phone_tel) + '" class="mgf-big" data-active-phone>' + esc(activeB.phone) + '</a>' +
         '      <a href="mailto:' + esc(activeB.email) + '" class="mgf-mail" data-active-email>' + esc(activeB.email) + '</a>' +
         '      <button type="button" class="mg-btn mg-btn-light" data-lead="Заказать бесплатный расчёт плитки" data-lead-type="Расчёт с сайта">Получить расчёт ↗</button>' +
         '    </div>' +
         '  </div>' +
         '  <div class="wrap mgf-bot">' +
-        '    <span>© ' + new Date().getFullYear() + ' Абба Керамика. Все права защищены.</span>' +
+        '    <span>© ' + new Date().getFullYear() + ' АББА Керамика. Все права защищены.</span>' +
         '    <span>Цены и наличие уточняйте у менеджера салона</span>' +
         '  </div>' +
         '</div>';
@@ -918,7 +875,7 @@
         '<div class="modal-bg" id="searchModalBg">' +
         '  <div class="srch-box">' +
         '    <div style="display:flex;gap:10px;align-items:center">' +
-        '      <input type="search" id="globalSearchInp" class="inp" placeholder="Поиск по названию, формату 60×120, мрамору, артикулу...">' +
+        '      <input type="search" id="globalSearchInp" class="inp" placeholder="Поиск по названию, коллекции, формату 60×120, мрамору...">' +
         '      <button type="button" class="ic-btn" data-close="searchModalBg">' + ic('close') + '</button>' +
         '    </div>' +
         '    <div class="srch-res" id="globalSearchRes"><p class="muted" style="padding:10px;margin:0">Начните вводить запрос — например, Травертин, Бетон, Оникс или 60×120.</p></div>' +
@@ -947,7 +904,7 @@
         '</div>' +
         '<div class="modal-bg mg-side-bg" id="mobMenuBg">' +
         '  <aside class="mg-side" aria-label="Меню">' +
-        '    <div class="mg-side-hd"><a href="index.html" class="mgh-logo"><img src="assets/img/mark.svg" alt="" width="34" height="34"><span><b>АББА</b><small>керамика</small></span></a><button type="button" class="mgh-ic" data-close="mobMenuBg" aria-label="Закрыть">' + ic('close') + '</button></div>' +
+        '    <div class="mg-side-hd"><a href="index.html" class="mgh-logo"><img src="assets/img/brand/logo.svg" alt="АББА Керамика" width="148" height="50"></a><button type="button" class="mgh-ic" data-close="mobMenuBg" aria-label="Закрыть">' + ic('close') + '</button></div>' +
         '    <div class="mg-side-bd">' +
         '      <a href="catalog.html" class="mg-side-main">' + ic('grid') + '<span>Весь каталог</span><small>' + PRODS.length + '</small></a>' +
         '      <details class="mg-acc" open><summary>Формат</summary><div>' + sizeKeys.map(function (k) { return '<a href="catalog.html?size=' + k + '">' + k.replace('x', '×') + ' см <small>' + sizes[k] + '</small></a>'; }).join('') + '</div></details>' +
@@ -956,9 +913,9 @@
         '      <nav class="mg-side-links">' +
         '        <a href="designer.html">' + ic('cube') + '3D-примерочная</a>' +
         '        <a href="calc.html">' + ic('calc') + 'Калькулятор расхода</a>' +
-        '        <a href="delivery.html">' + ic('truck') + 'Доставка и самовывоз</a>' +
-        '        <a href="contacts.html">' + ic('pin') + 'Салоны и склады</a>' +
-        '        <a href="opt.html">' + ic('store') + 'Дизайнерам и опт</a>' +
+        '        <a href="delivery.html">' + ic('truck') + 'Доставка и оплата</a>' +
+        '        <a href="contacts.html">' + ic('pin') + 'Салоны и контакты</a>' +
+        '        <a href="opt.html">' + ic('store') + 'Дизайнерам и архитекторам</a>' +
         '        <a href="about.html">' + ic('box') + 'О компании</a>' +
         '        <a href="account.html">' + ic('user') + 'Личный кабинет</a>' +
         '      </nav>' +
@@ -1057,7 +1014,7 @@
           return;
         }
         sres.innerHTML = found.map(function (p) {
-          return '<a class="srch-item" href="' + url(p) + '"><img src="' + esc(thumb(img(p))) + '" alt=""><div style="flex:1"><b>' + esc(p.name) + '</b><div class="muted" style="font-size:12px">' + esc(size(p)) + ' · ' + esc(p.surf || '') + ' · арт. ' + esc(p.sku || '') + '</div></div><b style="white-space:nowrap">' + (hasPrice(p) ? rub(p.price) + '/м²' : '<span class="muted" style="font-weight:500">по запросу</span>') + '</b></a>';
+          return '<a class="srch-item" href="' + url(p) + '"><img src="' + esc(thumb(img(p))) + '" alt=""><div style="flex:1"><b>' + esc(p.name) + '</b><div class="muted" style="font-size:12px">' + esc(size(p)) + ' · ' + esc(p.surf || '') + (p.brand ? ' · ' + esc(p.brand) : '') + '</div></div><b style="white-space:nowrap">' + (hasPrice(p) ? rub(p.price) + '/м²' : '<span class="muted" style="font-weight:500">по запросу</span>') + '</b></a>';
         }).join('');
       });
     }
@@ -1160,11 +1117,170 @@
     els.forEach(function (el) { io.observe(el); });
   }
 
+
+  /* ---------- Тексты страниц из админки (О компании, Дизайнерам, Доставка) ---------- */
+  function pageCfg(key) {
+    var p = (BASE.cfg && BASE.cfg.pages) || {};
+    return p[key] || null;
+  }
+  function splitItem(t) {
+    var s = String(t || '');
+    var m = s.match(/^(.+?)\s+[—–-]\s+(.+)$/);
+    return m ? { h: m[1], t: m[2] } : { h: s, t: '' };
+  }
+  function paras(t) {
+    return String(t || '').split(/\n\s*\n|\n/).map(function (x) { return x.trim(); }).filter(Boolean).map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('');
+  }
+  function telOf(s) {
+    var dg = String(s).replace(/\D/g, '');
+    if (dg.length === 11 && dg[0] === '8') dg = '7' + dg.slice(1);
+    return '+' + dg;
+  }
+  function phoneLinks(t) {
+    return esc(t).replace(/(\+?[78][\s(-]*\d{3}[\s)-]*\d{3}[\s-]*\d{2}[\s-]*\d{2})/g, function (m) { return '<a href="tel:' + telOf(m) + '">' + m + '</a>'; });
+  }
+  function catalogStats() {
+    var prods = (BASE.products || []);
+    var stock = 0;
+    prods.forEach(function (p) { var m = p.branch_stock && p.branch_stock.m2; if (m) stock += Number(m.msk || 0) + Number(m.tver || 0); });
+    return { stock: Math.round(stock), count: prods.length };
+  }
+  function sectionBtn(b) {
+    if (!b || !b.label) return '';
+    if (b.lead) return '<button type="button" class="mg-btn mg-btn-copper" data-lead="' + esc(b.lead) + '" data-lead-type="' + esc(b.lead) + '">' + esc(b.label) + '</button>';
+    return '<a class="mg-btn mg-btn-copper" href="' + esc(b.href || '#') + '">' + esc(b.label) + '</a>';
+  }
+  function renderSections(list) {
+    var st = catalogStats();
+    return (list || []).map(function (sec, si) {
+      var items = Array.isArray(sec.items) ? sec.items.filter(Boolean) : [];
+      var head = (sec.title ? '<h2 class="ab-h2">' + esc(sec.title) + '</h2>' : '') + (sec.text && sec.type !== 'text' ? '<p class="ab-lead">' + esc(sec.text) + '</p>' : '');
+      var body = '';
+      if (sec.type === 'text') body = '<div class="ab-text">' + paras(sec.text) + '</div>';
+      else if (sec.type === 'checks') body = '<div class="ab-checks">' + items.map(function (t, i) { var x = splitItem(t); return '<div class="ab-check mv" style="--d:' + (i * 70) + 'ms"><i>' + ic('check') + '</i><div><b>' + esc(x.h) + '</b>' + (x.t ? '<span>' + esc(x.t) + '</span>' : '') + '</div></div>'; }).join('') + '</div>';
+      else if (sec.type === 'specs') body = '<dl class="ab-specs">' + items.map(function (t) { var x = splitItem(t); return '<div><dt>' + esc(x.h) + '</dt><dd>' + esc(x.t) + '</dd></div>'; }).join('') + '</dl>';
+      else if (sec.type === 'list') body = '<ul class="ab-list">' + items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>';
+      else if (sec.type === 'steps') body = '<ol class="ab-steps">' + items.map(function (t, i) { var x = splitItem(t); return '<li class="mv" style="--d:' + (i * 80) + 'ms"><span class="ab-n">' + String(i + 1).padStart(2, '0') + '</span><b>' + esc(x.h) + '</b>' + (x.t ? '<small>' + esc(x.t) + '</small>' : '') + '</li>'; }).join('') + '</ol>';
+      else if (sec.type === 'phones') body = '<div class="ab-phones">' + items.map(function (t) { var x = splitItem(t); return '<div class="ab-phone"><span>' + esc(x.h) + '</span><b>' + phoneLinks(x.t || x.h) + '</b></div>'; }).join('') + '</div>';
+      else if (sec.type === 'stats') body = '<div class="ab-stats">' + items.map(function (t) {
+        var p = String(t).split('|');
+        var v = String(p[0] || '').replace('{stock}', st.stock).replace('{count}', st.count);
+        var n = Number(String(v).replace(/\s/g, ''));
+        return '<div class="ab-stat"><b><span' + (isFinite(n) && n > 0 ? ' data-count="' + n + '"' : '') + '>' + esc(isFinite(n) ? num(n) : v) + '</span>' + (p[1] ? '<small>' + esc(p[1]) + '</small>' : '') + '</b><span>' + esc(p[2] || '') + '</span></div>';
+      }).join('') + '</div>';
+      else if (sec.type === 'cta') return '<section class="ab-sec ab-cta mv"><div><h2 class="ab-h2">' + esc(sec.title || '') + '</h2>' + (sec.text ? '<p>' + esc(sec.text) + '</p>' : '') + '</div>' + sectionBtn(sec.button) + '</section>';
+      var btn = sec.button && sec.button.label ? '<div class="ab-btns">' + sectionBtn(sec.button) + '</div>' : '';
+      return '<section class="ab-sec ab-sec-' + esc(sec.type || 'text') + ' mv" data-i="' + si + '">' + head + body + btn + '</section>';
+    }).join('');
+  }
+
+  /* ---------- Мягкие анимации (уважают prefers-reduced-motion) ---------- */
+  var REDUCE = false;
+  try { REDUCE = w.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  var motionIO = null;
+  function countUp(el) {
+    var to = Number(el.getAttribute('data-count')) || 0;
+    if (REDUCE || to <= 0) { el.textContent = num(to); return; }
+    var t0 = null, dur = Math.min(1800, 900 + String(to).length * 120);
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur);
+      var e = 1 - Math.pow(1 - k, 3);
+      el.textContent = num(Math.round(to * e));
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function motion(root) {
+    root = root || d;
+    var sel = '.mv, .pc, .mg-sec-hd, .panel-card, .ab-sec, [data-count]';
+    var els = [].slice.call(root.querySelectorAll ? root.querySelectorAll(sel) : []);
+    if (root.matches && root.matches(sel)) els.push(root);
+    if (REDUCE || !('IntersectionObserver' in w)) {
+      els.forEach(function (el) { el.classList.add('mv-in'); if (el.hasAttribute('data-count')) countUp(el); });
+      return;
+    }
+    if (!motionIO) {
+      motionIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          var el = en.target;
+          el.classList.add('mv-in');
+          if (el.hasAttribute('data-count') && !el._counted) { el._counted = 1; countUp(el); }
+          motionIO.unobserve(el);
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    }
+    els.forEach(function (el) {
+      if (el._mv) return;
+      el._mv = 1;
+      var r = el.getBoundingClientRect();
+      // то, что уже на экране при загрузке, показываем сразу — без «мигания»
+      if (r.top < w.innerHeight * 0.9 && r.bottom > 0 && !el.hasAttribute('data-count')) { el.classList.add('mv-in', 'mv-now'); return; }
+      el.classList.add('mv-wait');
+      motionIO.observe(el);
+    });
+  }
+  function initMotion() {
+    d.documentElement.classList.add('mv-on');
+    motion(d);
+    if ('MutationObserver' in w) {
+      var t = null;
+      new MutationObserver(function () { clearTimeout(t); t = setTimeout(function () { motion(d); }, 60); }).observe(d.body, { childList: true, subtree: true });
+    }
+  }
+
+  /* ---------- schema.org: салоны с часами работы ---------- */
+  var DAYS = { 'пн': 'Monday', 'вт': 'Tuesday', 'ср': 'Wednesday', 'чт': 'Thursday', 'пт': 'Friday', 'сб': 'Saturday', 'вс': 'Sunday' };
+  var DAY_KEYS = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+  function hoursSpec(text) {
+    var out = [];
+    var s = String(text || '').toLowerCase();
+    var re = /(ежедневно|без выходных|(пн|вт|ср|чт|пт|сб|вс)(?:\s*[–-]\s*(пн|вт|ср|чт|пт|сб|вс))?)[^\d]*(\d{1,2})[:.](\d{2})\s*[–-]\s*(\d{1,2})[:.](\d{2})/g;
+    var m;
+    while ((m = re.exec(s))) {
+      var days = [];
+      if (m[2]) {
+        var a = DAY_KEYS.indexOf(m[2]), b = m[3] ? DAY_KEYS.indexOf(m[3]) : a;
+        for (var i = a; i <= b; i++) days.push(DAYS[DAY_KEYS[i]]);
+      } else days = DAY_KEYS.map(function (k) { return DAYS[k]; });
+      var pad = function (x) { return String(x).padStart(2, '0'); };
+      out.push({ '@type': 'OpeningHoursSpecification', dayOfWeek: days, opens: pad(m[4]) + ':' + m[5], closes: pad(m[6]) + ':' + m[7] });
+    }
+    return out;
+  }
+  function injectSchema() {
+    if (d.getElementById('abbaLd')) return;
+    var base = location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, '');
+    var data = branches().map(function (b) {
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'HomeGoodsStore',
+        name: 'АББА Керамика — ' + (b.city || '').replace(/^г\.\s*/, ''),
+        image: base + 'assets/img/brand/og-image.jpg',
+        logo: base + 'assets/img/brand/logo.png',
+        url: base + 'contacts.html',
+        telephone: b.phone_tel || b.phone,
+        email: b.email,
+        address: { '@type': 'PostalAddress', streetAddress: b.address, addressLocality: (b.city || '').replace(/^г\.\s*/, ''), addressCountry: 'RU' },
+        geo: Array.isArray(b.coords) ? { '@type': 'GeoCoordinates', latitude: b.coords[0], longitude: b.coords[1] } : undefined,
+        openingHoursSpecification: hoursSpec(b.hours)
+      };
+    });
+    var sc = d.createElement('script');
+    sc.type = 'application/ld+json';
+    sc.id = 'abbaLd';
+    sc.textContent = JSON.stringify(data);
+    d.head.appendChild(sc);
+  }
+
   function boot() {
     mountShell();
     initGlobalEvents();
     initReveal();
     renderCart();
+    try { initMotion(); } catch (e) {}
+    try { if (/index|contacts|about|^$/.test(location.pathname.split('/').pop() || '')) injectSchema(); } catch (e) {}
     syncBadges();
     updateBranchUI();
     d.querySelectorAll('.js-phone').forEach(fmtPhone);
@@ -1211,7 +1327,14 @@
     fmtPhone: fmtPhone,
     send: send,
     staticContact: staticContact,
-    initReveal: initReveal
+    initReveal: initReveal,
+    pageCfg: pageCfg,
+    renderSections: renderSections,
+    motion: motion,
+    countUp: countUp,
+    hoursSpec: hoursSpec,
+    paras: paras,
+    phoneLinks: phoneLinks
   });
 
   if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot);
