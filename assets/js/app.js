@@ -714,7 +714,7 @@
         '        <div class="mgh-city-pop" id="cityPop" role="menu">' +
         '          <b class="mgh-city-h">Выберите салон</b>' +
         brs.map(function (b) {
-          return '<button type="button" class="hd-branch-btn' + (b.id === activeB.id ? ' active' : '') + '" data-branch="' + esc(b.id) + '"><span class="hd-branch-dot"></span><span><b>' + esc(b.short_name) + '</b><small>' + esc(b.phone) + ' · ' + esc(b.hours || '') + '</small></span></button>';
+          return '<button type="button" class="hd-branch-btn' + (b.id === activeB.id ? ' active' : '') + '" data-branch="' + esc(b.id) + '"><span class="hd-branch-dot"></span><span><b>' + esc(b.short_name) + '</b><small class="hd-branch-ph">' + esc(b.phone) + '</small>' + (b.hours ? '<small class="hd-branch-hr">' + esc(b.hours) + '</small>' : '') + '</span></button>';
         }).join('') +
         '        </div>' +
         '      </div>' +

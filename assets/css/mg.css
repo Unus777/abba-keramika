@@ -877,3 +877,9 @@ html.mv-on .mv-wait.mv-in { opacity: 1; transform: none; transition: opacity .7s
   .mg-stats div:nth-child(n+3) { border-top: 0; }
 }
 @media (max-width: 600px) { .ab-stats { grid-template-columns: 1fr 1fr; } }
+
+/* v2.1: выбор салона — телефон и часы отдельными строками, без выхода за край */
+.mgh-city-pop { width: 360px; max-width: calc(100vw - 24px); white-space: normal; }
+.mgh-city-pop .hd-branch-btn > span:not(.hd-branch-dot) { min-width: 0; flex: 1 1 auto; }
+.mgh-city-pop .hd-branch-btn small { display: block; white-space: normal; overflow-wrap: anywhere; line-height: 1.45; }
+.mgh-city-pop .hd-branch-ph { color: var(--mg-tx); font-weight: 600; margin-top: 2px; }
