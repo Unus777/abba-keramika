@@ -36,10 +36,10 @@
       var total = Math.max(0, t.sum - discRub);
 
       sumEl.innerHTML =
-        '<h3 style="margin-top:0">Ваш заказ (' + t.boxes + ' уп.)</h3>' +
+        '<h3 style="margin-top:0">Ваш заказ (' + t.items.length + ' поз.)</h3>' +
         '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">' +
         t.items.map(function (r) {
-          return '<div class="sum-row"><span>' + U.esc(r.item.name) + ' × ' + r.q + ' уп.</span><b>' + (r.line > 0 ? U.rub(r.line) : 'по запросу') + '</b></div>';
+          return '<div class="sum-row"><span>' + U.esc(r.item.name) + ' × ' + r.q + ' ' + r.unit + '</span><b>' + (r.line > 0 ? U.rub(r.line) : 'по запросу') + '</b></div>';
         }).join('') +
         '</div>' +
         '<div class="sum-row"><span>Общая площадь / вес</span><b>' + t.area.toFixed(2) + ' м² · ' + Math.round(t.weight) + ' кг</b></div>' +
@@ -101,7 +101,7 @@
         delivery_cost: del.cost,
         total_amount: total,
         items: t.items.map(function (r) {
-          return { id: r.item.id, name: r.item.name, qty: r.q, price: r.boxPrice, line: r.line };
+          return { id: r.item.id, name: r.item.name, qty: r.q, unit: r.unit, price: r.boxPrice, line: r.line };
         })
       };
 

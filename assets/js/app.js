@@ -265,10 +265,21 @@
     return !!(p && Number(p.price) > 0);
   }
 
+  // Единица цены: плитка — ₽ за м², ступени и декоры — ₽ за штуку (price_unit = 'pc')
+  function isPc(p) { return !!(p && p.price_unit === 'pc'); }
+  function unitLabel(p) { return isPc(p) ? 'шт' : 'м²'; }
+  // Единица количества в корзине: штучные товары — штуки, плитка — упаковки
+  function qtyUnit(p) { return isPc(p) ? 'шт.' : 'уп.'; }
+  // Цена, приведённая к ₽/м², — для сортировки и фильтра «Цена до»
+  function m2Price(p) {
+    if (!hasPrice(p)) return 0;
+    return isPc(p) ? Number(p.price) * (Number(p.pcs) || 1) / (Number(p.m2) || 1) : Number(p.price);
+  }
+
   // «Цена по запросу», если цена не задана в админке
   function priceText(p, unit) {
     if (!hasPrice(p)) return 'Цена по запросу';
-    return rub(p.price) + (unit === false ? '' : ' / м²');
+    return rub(p.price) + (unit === false ? '' : ' / ' + unitLabel(p));
   }
 
   // Миниатюра для карточек: …/01.jpg -> …/01_t.jpg
@@ -290,7 +301,12 @@
 
   function boxPrice(p) {
     if (!p) return 0;
-    return isAcc(p) ? p.price : Math.round((p.price || 0) * (p.m2 || 1));
+    return isAcc(p) || isPc(p) ? p.price : Math.round((p.price || 0) * (p.m2 || 1));
+  }
+  // Цена за целую упаковку (для штучных товаров — штук в упаковке × цена за штуку)
+  function packPrice(p) {
+    if (!p) return 0;
+    return isPc(p) ? Math.round((p.price || 0) * (p.pcs || 1)) : boxPrice(p);
   }
 
   function catalogUrl(params) {
@@ -392,7 +408,7 @@
       syncBadges();
       renderCart();
       var item = byId(id);
-      toast((item && !hasPrice(item) && !isAcc(item) ? 'В заявке: ' : 'В корзине: ') + (item ? item.name : id) + ' (' + b + ' уп.)');
+      toast((item && !hasPrice(item) && !isAcc(item) ? 'В заявке: ' : 'В корзине: ') + (item ? item.name : id) + ' (' + b + ' ' + qtyUnit(item) + ')');
     },
     set: function (id, q) {
       var l = cart.list();
@@ -422,9 +438,10 @@
         var line = bp * row.q;
         sum += line;
         boxes += row.q;
-        if (!isAcc(p)) area += (p.m2 || 1) * row.q;
-        weight += (p.wt || 15) * row.q;
-        items.push({ item: p, q: row.q, line: line, boxPrice: bp });
+        var pk = isPc(p) ? (p.pcs || 1) : 1;
+        if (!isAcc(p)) area += (p.m2 || 1) / pk * row.q;
+        weight += (p.wt || 15) / pk * row.q;
+        items.push({ item: p, q: row.q, line: line, boxPrice: bp, unit: qtyUnit(p) });
       });
       return { sum: sum, area: area, weight: weight, boxes: boxes, items: items, noPrice: noPrice };
     }
@@ -496,7 +513,7 @@
       '    <div class="pc-foot">' +
       '      <div class="pc-price">' +
       (hasPrice(p)
-        ? (p.old && p.old > p.price ? '<s>' + rub(p.old) + '</s>' : '') + '<b>' + rub(p.price) + '</b><small> / м²</small>'
+        ? (p.old && p.old > p.price ? '<s>' + rub(p.old) + '</s>' : '') + '<b>' + rub(p.price) + '</b><small> / ' + unitLabel(p) + '</small>'
         : '<b class="ask">Цена по запросу</b>') +
       '      </div>' +
       '      <button type="button" class="btn-cart pc-buy' + (inCart ? ' in' : '') + '" data-add="' + esc(p.id) + '">' + ic('cart') + '<span>' + (inCart ? 'В корзине ✓' : (hasPrice(p) ? 'В корзину' : 'В заявку')) + '</span></button>' +
@@ -575,7 +592,7 @@
     Object.keys(labels).forEach(function (k) { if (body[k]) lines.push(labels[k] + ': ' + body[k]); });
     if (Array.isArray(body.items) && body.items.length) {
       lines.push('Состав заявки:');
-      body.items.forEach(function (it) { lines.push('— ' + it.name + ', ' + it.qty + ' уп.'); });
+      body.items.forEach(function (it) { lines.push('— ' + it.name + ', ' + it.qty + ' ' + (it.unit || 'уп.')); });
     }
     lines.push('Страница: ' + location.href);
     var subj = 'Заявка с сайта ' + (num || '') + ' — ' + (body.type || 'АББА Керамика');
@@ -644,10 +661,10 @@
         '  <img src="' + esc(isAcc(p) ? accImg(p) : img(p)) + '" alt="' + esc(p.name) + '">' +
         '  <div>' +
         '    <b style="font-size:13.5px;display:block">' + esc(p.name) + '</b>' +
-        '    <small class="muted">' + (row.boxPrice > 0 ? rub(row.boxPrice) + ' / уп.' : 'Цена по запросу') + (!isAcc(p) ? ' · ' + ((p.m2 || 1) * row.q).toFixed(2) + ' м²' : '') + '</small>' +
+        '    <small class="muted">' + (row.boxPrice > 0 ? rub(row.boxPrice) + ' / ' + row.unit : 'Цена по запросу') + (!isAcc(p) && !isPc(p) ? ' · ' + ((p.m2 || 1) * row.q).toFixed(2) + ' м²' : '') + '</small>' +
         '    <div class="qty" style="margin-top:6px">' +
         '      <button type="button" data-cdec="' + esc(p.id) + '">−</button>' +
-        '      <span style="padding:0 8px;font-size:13px;font-weight:600">' + row.q + '</span>' +
+        '      <span style="padding:0 8px;font-size:13px;font-weight:600">' + row.q + ' ' + row.unit + '</span>' +
         '      <button type="button" data-cinc="' + esc(p.id) + '">+</button>' +
         '    </div>' +
         '  </div>' +
@@ -677,7 +694,7 @@
         openLead({
           title: 'Быстрый заказ по корзине',
           type: 'Быстрый заказ',
-          comment: t.items.map(function (r) { return r.item.name + ' × ' + r.q + ' уп.'; }).join('; ') + ' (Сумма: ' + rub(t.sum) + ')'
+          comment: t.items.map(function (r) { return r.item.name + ' × ' + r.q + ' ' + r.unit; }).join('; ') + ' (Сумма: ' + rub(t.sum) + ')'
         });
       };
     }
@@ -1014,7 +1031,7 @@
           return;
         }
         sres.innerHTML = found.map(function (p) {
-          return '<a class="srch-item" href="' + url(p) + '"><img src="' + esc(thumb(img(p))) + '" alt=""><div style="flex:1"><b>' + esc(p.name) + '</b><div class="muted" style="font-size:12px">' + esc(size(p)) + ' · ' + esc(p.surf || '') + (p.brand ? ' · ' + esc(p.brand) : '') + '</div></div><b style="white-space:nowrap">' + (hasPrice(p) ? rub(p.price) + '/м²' : '<span class="muted" style="font-weight:500">по запросу</span>') + '</b></a>';
+          return '<a class="srch-item" href="' + url(p) + '"><img src="' + esc(thumb(img(p))) + '" alt=""><div style="flex:1"><b>' + esc(p.name) + '</b><div class="muted" style="font-size:12px">' + esc(size(p)) + ' · ' + esc(p.surf || '') + (p.brand ? ' · ' + esc(p.brand) : '') + '</div></div><b style="white-space:nowrap">' + (hasPrice(p) ? rub(p.price) + '/' + unitLabel(p) : '<span class="muted" style="font-weight:500">по запросу</span>') + '</b></a>';
         }).join('');
       });
     }
@@ -1304,6 +1321,11 @@
     url: url,
     size: size,
     boxPrice: boxPrice,
+    packPrice: packPrice,
+    isPc: isPc,
+    unitLabel: unitLabel,
+    qtyUnit: qtyUnit,
+    m2Price: m2Price,
     hasPrice: hasPrice,
     priceText: priceText,
     thumb: thumb,

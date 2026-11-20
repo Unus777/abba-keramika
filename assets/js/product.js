@@ -90,13 +90,14 @@
     $('prodSeries').textContent = (coll ? 'Коллекция ' + coll : 'Керамогранит') + ' · ' + U.size(p);
     $('prodTitle').textContent = p.name;
     $('prodBrand').textContent = p.brand || 'АББА Керамика';
-    $('prodPrice').innerHTML = priced ? U.esc(U.rub(p.price)) + '<small> / м²</small>' : '<span class="price-ask">Цена по запросу</span>';
+    var pc = U.isPc(p), ul = U.unitLabel(p);
+    $('prodPrice').innerHTML = priced ? U.esc(U.rub(p.price)) + '<small> / ' + ul + '</small>' : '<span class="price-ask">Цена по запросу</span>';
     var oldEl = $('prodOld');
     if (priced && p.old && p.old > p.price) { oldEl.textContent = U.rub(p.old); } else oldEl.style.display = 'none';
     var th = String(p.th || 8.5).replace('.', ',') + ' мм';
     $('prodChips').innerHTML = [U.size(p), th, p.surf, U.label('designs', p.design), p.color].filter(Boolean).map(function (c) { return '<span>' + U.esc(c) + '</span>'; }).join('');
     var pack = 'В упаковке ' + (p.pcs || 1) + ' шт. = ' + String(p.m2 || 1).replace('.', ',') + ' м²' + (p.wt ? ' · ' + String(p.wt).replace('.', ',') + ' кг' : '');
-    $('prodBoxInfo').textContent = priced ? pack + ' · ' + U.rub(U.boxPrice(p)) + ' за упаковку' : pack + ' · менеджер пришлёт цену и расчёт в течение рабочего дня';
+    $('prodBoxInfo').textContent = priced ? pack + ' · ' + U.rub(U.packPrice(p)) + ' за упаковку' : pack + ' · менеджер пришлёт цену и расчёт в течение рабочего дня';
     $('prodGeoSub').textContent = [U.size(p), th, p.surf].filter(Boolean).join(' · ');
     $('prodFacts').innerHTML = [
       ['Формат', U.size(p)], ['Толщина', th], ['Поверхность', p.surf || '—'], ['Дизайн', U.label('designs', p.design)],
@@ -170,7 +171,22 @@
     var areaInp = $('prodArea'), marginChk = $('prodMargin'), calcRes = $('prodCalcRes');
     var boxes = 1, unit = 'm2', per = Number(p.m2 || 1);
     function fmt2(n) { return (Math.round(n * 100) / 100).toString().replace('.', ','); }
+    // Штучные товары (ступени, декоры): количество и цена — в штуках
+    if (pc) {
+      unit = 'pc';
+      $('prodUnit').innerHTML = '<button type="button" class="on" data-unit="pc">штуки</button>';
+      areaInp.step = 1; areaInp.min = 1; areaInp.value = 1;
+      marginChk.closest('label').style.display = 'none';
+    }
     function recalc() {
+      if (pc) {
+        boxes = Math.max(1, Math.round(Number(String(areaInp.value).replace(',', '.')) || 1));
+        var pk = Number(p.pcs) || 1, packs = boxes / pk;
+        calcRes.innerHTML = '<div><small>Штук</small><b>' + boxes + '</b></div><div><small>Упаковок</small><b>' + (Number.isInteger(packs) ? packs : fmt2(packs)) + '</b></div><div><small>Площадь</small><b>' + fmt2(boxes * per / pk) + ' м²</b></div>' +
+          '<div class="mg-calc-sum"><small>Итого</small><b>' + (priced ? U.rub(boxes * Number(p.price)) : 'по запросу') + '</b></div>';
+        $('stMeta').textContent = U.size(p) + ' · ' + boxes + ' шт.';
+        return;
+      }
       var v = Math.max(unit === 'm2' ? 0.5 : 1, Number(String(areaInp.value).replace(',', '.')) || 1);
       if (unit === 'm2') { var a = marginChk.checked ? v * 1.1 : v; boxes = Math.max(1, Math.ceil(a / per)); }
       else boxes = Math.max(1, Math.round(v));
@@ -204,7 +220,7 @@
       U.openLead({
         title: priced ? 'Быстрый заказ — ' + p.name : 'Узнать цену — ' + p.name,
         type: priced ? 'Быстрый заказ товара' : 'Запрос цены',
-        comment: p.name + ' ' + U.size(p) + ', ' + boxes + ' уп. / ' + (boxes * per).toFixed(2) + ' м²'
+        comment: p.name + ' ' + U.size(p) + ', ' + (pc ? boxes + ' шт.' : boxes + ' уп. / ' + (boxes * per).toFixed(2) + ' м²')
       });
     };
     $('prodTry3d').href = 'designer.html?tile=' + encodeURIComponent(p.id);
@@ -215,7 +231,7 @@
     var sticky = $('prodSticky');
     $('stImg').src = U.thumb(imgs[0]);
     $('stName').textContent = p.name;
-    $('stPrice').innerHTML = priced ? U.esc(U.rub(p.price)) + '<small>/м²</small>' : 'Цена по запросу';
+    $('stPrice').innerHTML = priced ? U.esc(U.rub(p.price)) + '<small>/' + ul + '</small>' : 'Цена по запросу';
     $('stAdd').textContent = addBtn.textContent;
     $('stAdd').onclick = function () { U.cart.add(p.id, boxes); };
     if ('IntersectionObserver' in w) {

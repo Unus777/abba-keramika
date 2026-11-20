@@ -19,8 +19,8 @@
 
     if (tileSel) {
       tileSel.innerHTML = '<option value="custom">Свой формат 60×120 см (упаковка 1.44 м²)</option>' +
-        (U.products || []).filter(function (p) { return !p.is_hidden; }).slice().sort(function (a, b) { return String(a.name).localeCompare(String(b.name), 'ru'); }).map(function (p) {
-          return '<option value="' + U.esc(p.id) + '">' + U.esc(p.name) + ' · ' + U.size(p) + (U.hasPrice(p) ? ' (' + U.rub(p.price) + '/м²)' : '') + '</option>';
+        (U.products || []).filter(function (p) { return !p.is_hidden && !U.isPc(p); }).slice().sort(function (a, b) { return String(a.name).localeCompare(String(b.name), 'ru'); }).map(function (p) {
+          return '<option value="' + U.esc(p.id) + '">' + U.esc(p.name) + ' · ' + U.size(p) + (U.hasPrice(p) ? ' (' + U.rub(p.price) + '/' + U.unitLabel(p) + ')' : '') + '</option>';
         }).join('');
     }
 

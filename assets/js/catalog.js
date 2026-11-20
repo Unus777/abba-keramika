@@ -28,7 +28,10 @@
     };
 
     var priced = PRODUCTS.filter(function (p) { return Number(p.price) > 0; });
-    var maxP = priced.reduce(function (m, p) { return Math.max(m, Number(p.price)); }, 0);
+    // Фильтр «Цена до» — по цене за м² (у штучных товаров — в пересчёте на м²); шкала — по плитке
+    var mp = U.m2Price;
+    var maxP = priced.filter(function (p) { return !U.isPc(p); }).reduce(function (m, p) { return Math.max(m, mp(p)); }, 0) ||
+      priced.reduce(function (m, p) { return Math.max(m, mp(p)); }, 0);
     maxP = Math.ceil(maxP / 100) * 100;
 
     var state = { q: '', brand: [], design: [], color: [], room: [], surf: [], size: [], country: [], coll: [], flags: [], maxPrice: maxP || 0, sort: 'popular', page: 1 };
@@ -49,7 +52,7 @@
     } else if (priced.length && $('priceGrp')) {
       $('priceGrp').style.display = '';
       priceMax.max = maxP; priceMax.value = state.maxPrice;
-      priceVal.textContent = U.rub(state.maxPrice);
+      priceVal.textContent = U.rub(state.maxPrice) + ' / м²';
     }
     if (qInput) qInput.value = state.q;
     if (sortSel) sortSel.value = state.sort;
@@ -114,7 +117,7 @@
       if (skip !== 'country' && state.country.length && state.country.indexOf(p.country) < 0) return false;
       if (skip !== 'coll' && state.coll.length && state.coll.indexOf(p.coll) < 0) return false;
       for (var i = 0; i < state.flags.length; i++) { if (skip !== 'flag:' + state.flags[i] && !flagFn[state.flags[i]](p)) return false; }
-      if (priced.length && state.maxPrice < maxP && Number(p.price) > state.maxPrice) return false;
+      if (priced.length && state.maxPrice < maxP && mp(p) > state.maxPrice) return false;
       return true;
     }
 
@@ -147,8 +150,10 @@
     function sortList(list) {
       var s = state.sort;
       var nm = function (a, b) { return String(a.name).localeCompare(String(b.name), 'ru'); };
-      if (s === 'price_asc') return list.sort(function (a, b) { return (a.price || 1e9) - (b.price || 1e9); });
-      if (s === 'price_desc') return list.sort(function (a, b) { return (b.price || 0) - (a.price || 0); });
+      // Сортировка по цене: сначала плитка (₽/м²), затем штучные товары (₽/шт), без цены — в конце
+      var grp = function (p) { return !U.hasPrice(p) ? 2 : (U.isPc(p) ? 1 : 0); };
+      if (s === 'price_asc') return list.sort(function (a, b) { return (grp(a) - grp(b)) || ((Number(a.price) || 0) - (Number(b.price) || 0)); });
+      if (s === 'price_desc') return list.sort(function (a, b) { return (grp(a) - grp(b)) || ((Number(b.price) || 0) - (Number(a.price) || 0)); });
       if (s === 'stock') return list.sort(function (a, b) { return Number(b.stock_qty || 0) - Number(a.stock_qty || 0); });
       if (s === 'new') return list.sort(function (a, b) { return (flagFn.new(b) - flagFn.new(a)) || (hasPhoto(b) - hasPhoto(a)) || nm(a, b); });
       if (s === 'name') return list.sort(nm);
@@ -267,7 +272,7 @@
 
     function resetAll() {
       state.q = ''; GROUPS.forEach(function (g) { state[g] = []; }); state.flags = []; state.page = 1;
-      if (priced.length) { state.maxPrice = maxP; priceMax.value = maxP; priceVal.textContent = U.rub(maxP); }
+      if (priced.length) { state.maxPrice = maxP; priceMax.value = maxP; priceVal.textContent = U.rub(maxP) + ' / м²'; }
       if (qInput) qInput.value = '';
       d.querySelectorAll('[data-flt],[data-flag]').forEach(function (el) { el.checked = false; });
       apply();
@@ -292,7 +297,7 @@
     var qt;
     if (qInput) qInput.addEventListener('input', function () { clearTimeout(qt); qt = setTimeout(function () { state.q = qInput.value.trim(); state.page = 1; apply(); }, 120); });
     if (sortSel) sortSel.addEventListener('change', function () { state.sort = sortSel.value; state.page = 1; apply(); });
-    if (priceMax) priceMax.addEventListener('input', function () { state.maxPrice = Number(priceMax.value); priceVal.textContent = U.rub(state.maxPrice); state.page = 1; apply(); });
+    if (priceMax) priceMax.addEventListener('input', function () { state.maxPrice = Number(priceMax.value); priceVal.textContent = U.rub(state.maxPrice) + ' / м²'; state.page = 1; apply(); });
     if ($('catReset')) $('catReset').onclick = resetAll;
 
     // мобильные фильтры — выезжающая панель
