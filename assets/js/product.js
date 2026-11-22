@@ -22,7 +22,8 @@
 
     d.title = p.name + ' ' + U.size(p) + ' — керамогранит | АББА Керамика';
     var md = d.querySelector('meta[name="description"]');
-    if (md) md.setAttribute('content', 'Керамогранит ' + p.name + ' ' + U.size(p) + ', ' + String(p.surf || '').toLowerCase() + ' поверхность. ' + U.stockInfo(p).text + '. АББА Керамика — Москва, Мытищи, Тверь.');
+    var siMeta = U.stockInfo(p);
+    if (md) md.setAttribute('content', 'Керамогранит ' + p.name + ' ' + U.size(p) + ', ' + String(p.surf || '').toLowerCase() + ' поверхность.' + (siMeta.text ? ' ' + siMeta.text + '.' : '') + ' АББА Керамика — Москва, Мытищи, Тверь.');
 
     $('prodBread').innerHTML = '<a href="index.html">Главная</a><span>›</span><a href="catalog.html">Каталог</a><span>›</span><a href="catalog.html?size=' + encodeURIComponent(p.w + 'x' + p.h) + '">' + U.esc(p.w + '×' + p.h) + '</a><span>›</span><a href="catalog.html?design=' + encodeURIComponent(p.design) + '">' + U.esc(U.label('designs', p.design)) + '</a><span>›</span><b>' + U.esc(p.name) + '</b>';
 
@@ -83,7 +84,7 @@
     // ---------- основное ----------
     var tags = p.tags || [];
     var si = U.stockInfo(p);
-    var badges = ['<span class="mg-stock ' + si.cls + '">' + U.esc(si.text) + '</span>'];
+    var badges = si.text ? ['<span class="mg-stock ' + si.cls + '">' + U.esc(si.text) + '</span>'] : [];
     if (tags.indexOf('new') >= 0) badges.unshift('<span class="pc-badge new">Новинка</span>');
     $('prodBadges').innerHTML = badges.join('');
     var coll = String(p.coll || '').replace(/^Коллекция\s+/, '');
@@ -155,17 +156,22 @@
     var rows = [];
     function fm(n) { return Math.round(Number(n) || 0).toLocaleString('ru-RU'); }
     if (m2.msk !== undefined || m2.tver !== undefined) {
-      rows.push(['Склад Москва', Number(m2.msk) > 0 ? 'ok' : 'order', Number(m2.msk) > 0 ? fm(m2.msk) + ' м²' : 'под заказ']);
-      rows.push(['Склад Тверь', Number(m2.tver) > 0 ? 'ok' : 'order', Number(m2.tver) > 0 ? fm(m2.tver) + ' м²' : 'под заказ']);
-      rows.push(['Шоу-рум Мытищи', Number(m2.msk) > 0 ? 'ok' : 'order', Number(m2.msk) > 0 ? 'доставка со склада 1–2 дня' : 'привезём под заказ']);
-      if (p.stock_status === 'supplier') rows = [['Склад поставщика', 'ok', Number(p.supplier_m2) > 0 ? fm(p.supplier_m2) + ' м²' : 'есть'], ['Шоу-румы', 'order', 'привезём под заказ — срок уточнит менеджер']];
+      if (Number(m2.msk) > 0) rows.push(['Склад Москва', 'ok', fm(m2.msk) + ' м²']);
+      if (Number(m2.tver) > 0) rows.push(['Склад Тверь', 'ok', fm(m2.tver) + ' м²']);
+      if (Number(m2.msk) > 0) rows.push(['Шоу-рум Мытищи', 'ok', 'доставка со склада 1–2 дня']);
     } else {
-      U.branches().forEach(function (b) { var st = bs[b.id] || p.stock_status || 'pre_order'; rows.push([b.short_name, st === 'in_stock' ? 'ok' : 'order', U.label('stock', st)]); });
+      U.branches().forEach(function (b) {
+        var st = bs[b.id] || p.stock_status || '';
+        if (st === 'in_stock') rows.push([b.short_name, 'ok', U.label('stock', st)]);
+      });
     }
-    if (p.stock_status === 'awaiting') rows = [['Все склады', 'order', 'ожидается поступление — оформите предзаказ']];
-    $('prodBranchStock').innerHTML = rows.map(function (r) {
+    var stockBox = $('prodBranchStock');
+    stockBox.innerHTML = rows.map(function (r) {
       return '<div class="stock-row"><span>' + U.esc(r[0]) + '</span><b class="' + r[1] + '">' + U.esc(r[2]) + '</b></div>';
     }).join('');
+    var stockHead = stockBox.previousElementSibling;
+    if (stockHead && stockHead.tagName === 'H4') stockHead.hidden = !rows.length;
+    stockBox.hidden = !rows.length;
 
     // ---------- калькулятор ----------
     var areaInp = $('prodArea'), marginChk = $('prodMargin'), calcRes = $('prodCalcRes');

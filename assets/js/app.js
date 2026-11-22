@@ -289,14 +289,11 @@
   }
 
   function stockInfo(p) {
-    var st = (p && p.stock_status) || 'in_stock';
     var m2 = (p && p.branch_stock && p.branch_stock.m2) || null;
     var qty = m2 ? (Number(m2.msk || 0) + Number(m2.tver || 0)) : Number(p && p.stock_qty || 0);
-    if (st === 'in_stock') return { cls: 'ok', text: 'В наличии' + (qty > 0 ? ' · ' + num(Math.round(qty)) + ' м²' : '') };
-    if (st === 'awaiting') return { cls: 'soon', text: 'Ожидается поступление' };
-    if (st === 'supplier') return { cls: 'order', text: 'Под заказ · есть на складе поставщика' };
-    if (st === 'pre_order') return { cls: 'order', text: 'Под заказ' };
-    return { cls: 'off', text: 'Нет в наличии' };
+    // Показываем наличие только при остатке на своих складах; иначе строку скрываем
+    if (qty > 0) return { cls: 'ok', text: 'В наличии · ' + num(Math.round(qty)) + ' м²' };
+    return { cls: '', text: '' };
   }
 
   function boxPrice(p) {
@@ -518,7 +515,7 @@
       '      </div>' +
       '      <button type="button" class="btn-cart pc-buy' + (inCart ? ' in' : '') + '" data-add="' + esc(p.id) + '">' + ic('cart') + '<span>' + (inCart ? 'В корзине ✓' : (hasPrice(p) ? 'В корзину' : 'В заявку')) + '</span></button>' +
       '    </div>' +
-      '    <div class="pc-stock ' + si.cls + '">' + esc(si.text) + '</div>' +
+      (si.text ? '    <div class="pc-stock ' + si.cls + '">' + esc(si.text) + '</div>' : '') +
       '  </div>' +
       '</article>'
     );
